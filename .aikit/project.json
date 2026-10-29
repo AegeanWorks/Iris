@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "name": "iris",
+  "test_command": "node --test tests",
+  "topics": [
+    "aikit",
+    "aikit-integrated",
+    "source-available",
+    "aegean-game-license",
+    "drm-free",
+    "commercial-license",
+    "puzzle",
+    "browser-game",
+    "vanilla-javascript",
+    "light",
+    "color"
+  ],
+  "gates": {},
+  "ui_required": false,
+  "mechanics_required": false,
+  "created": "2026-10-29"
+}
