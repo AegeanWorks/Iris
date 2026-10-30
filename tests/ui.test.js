@@ -40,6 +40,7 @@ test("the shell has the required screens, dialogs and controls", () => {
     "btn-undo",
     "btn-reset",
     "btn-hint",
+    "btn-help-game",
     "btn-sound-title",
     "btn-sound-game",
     "help-dialog",
@@ -67,6 +68,7 @@ test("the UI inventory names every control, panel and cue", () => {
     "control: back-title @ index.html",
     "control: chambers @ index.html",
     "control: help-close @ index.html",
+    "control: help-game @ index.html",
     "control: hint @ index.html",
     "control: how-to-play @ index.html",
     "control: next @ index.html",
@@ -97,6 +99,7 @@ test("the UI attribute sets match between the shell and the app", () => {
     "back-title",
     "chambers",
     "help-close",
+    "help-game",
     "hint",
     "how-to-play",
     "next",
@@ -163,7 +166,7 @@ test("the progress key is namespaced for the host site", () => {
 });
 
 test("the package manifest matches the README promise", () => {
-  assert.equal(packageJson.version, "0.1.0");
+  assert.equal(packageJson.version, "0.2.0");
   assert.equal(packageJson.type, "module");
   assert.equal(packageJson.scripts.test, "node --test");
   assert.equal(packageJson.engine ?? packageJson.engines.node, ">=20");

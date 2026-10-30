@@ -369,6 +369,22 @@ async function main() {
       throw new Error(`Undo did not restore the previous move: ${JSON.stringify(undone)}.`);
     }
 
+    await clickSelector(connection, "#btn-help-game");
+    const help = await connection.evaluate(`(() => ({
+      open: document.getElementById('help-dialog').open,
+      label: document.getElementById('btn-help-close').textContent
+    }))()`);
+    if (!help.open || help.label !== "Back to the board") {
+      throw new Error(`The in-game field guide did not open: ${JSON.stringify(help)}.`);
+    }
+    await clickSelector(connection, "#btn-help-close");
+    const helpClosed = await connection.evaluate(
+      "!document.getElementById('help-dialog').open",
+    );
+    if (!helpClosed) {
+      throw new Error("The in-game field guide did not close.");
+    }
+
     await clickSelector(connection, "#btn-sound-game");
     const sound = await connection.evaluate(`(() => ({
       pressed: document.getElementById('btn-sound-game').getAttribute('aria-pressed'),
@@ -438,7 +454,7 @@ async function main() {
     if (Math.abs(square.width - square.height) > 2) {
       throw new Error(`The board is not square at 800x600: ${JSON.stringify(square)}.`);
     }
-    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, hint, preview and responsive board.");
+    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, hint, in-game help, preview and responsive board.");
     return 0;
   } catch (error) {
     console.error(`[FAIL] Iris dogfood: ${error.message}`);

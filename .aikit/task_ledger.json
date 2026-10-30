@@ -1,15 +1,14 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-ci-node20",
+    "task_id": "iris-help",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793363155.1217833,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793372443.7545543,
     "owner": "kilo:iris",
     "started_by": "kilo:iris",
-    "continuations": [],
-    "completed_at": 1793363970.1657646
+    "continuations": []
   },
   "checkpoints": [
     {
@@ -211,6 +210,41 @@
       "timestamp": 1793363970.165766,
       "timestamp_str": "2026-10-30 15:39:30",
       "agent": "kilo:iris"
+    },
+    {
+      "task_id": "iris-help",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/2] Add an in-game Help control that opens the field guide and labels the close action for the board. [2/2] Verify the UI contract, browser dogfood, version 0.2.0 and the Live refresh.",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793372443.378183,
+      "timestamp_str": "2026-10-30 18:00:43",
+      "agent": "kilo:iris",
+      "impact_assessment": {
+        "why": "Once a chamber opens, the field guide is unreachable without abandoning the route, which is a real usability gap for a first-time player.",
+        "benefits": "Players can reopen the rules mid-chamber, the close button says what it does, and the version advances to 0.2.0 for the website label.",
+        "risks": "contract: a new UI control and inventory entry; dependency: none; concurrency: the website live sync may refresh other apps; state: local progress schema is unchanged.",
+        "mitigation": "Cover the control in the UI inventory, require the id in the shell tests, exercise open and close in the browser dogfood, then run the UI contract and strict gates."
+      }
+    },
+    {
+      "task_id": "iris-help",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "In-game Help opens the field guide with a board-specific close label; 73/73 tests, dogfood, 5/5 gates and media audit pass; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793372443.7545543,
+      "timestamp_str": "2026-10-30 18:00:43",
+      "agent": "kilo:iris",
+      "handoff": {
+        "state": "6 modified files plus bookkeeping",
+        "next": "commit, record the UI task, push and refresh the Live build",
+        "failed": "none",
+        "open": "UI contract needs a new finished task",
+        "evidence": "dogfood OK, test suite OK"
+      }
     }
   ]
 }
