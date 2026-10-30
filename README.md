@@ -83,6 +83,9 @@ iris/
 │       ├── audio.js        <- generated Web Audio cues
 │       └── progress.js     <- versioned localStorage record
 ├── assets/                 <- favicon, logo and social preview; no audio files
+├── package.json            <- name, version, test and tooling scripts
+├── play.cmd                <- Windows launcher for the local server
+├── play.sh                 <- macOS/Linux launcher for the local server
 ├── scripts/                <- local server, level checker, UI inventory, dogfood
 ├── tests/                  <- node:test suites
 ├── PLAYABLE.md             <- the static contract the website build must keep
