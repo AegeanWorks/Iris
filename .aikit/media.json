@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "name": "iris",
+  "repo": "Iris",
+  "has_ui": true,
+  "ui_kind": "game",
+  "palette": [
+    "#070510",
+    "#1f1740",
+    "#7fdcff",
+    "#e05cff"
+  ],
+  "motif": "additive-light",
+  "layout": "split",
+  "assets": {
+    "logo": {
+      "path": "assets/logo.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-29T21:37:48",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo-iris",
+        "method": "vision",
+        "notes": "Rendered the SVG at 512px and inspected it: the three additive discs, white core and beam read cleanly at square size, the Iris wordmark and AEGEANWORKS line are legible, contrast against the dark field is strong, and no text is clipped.",
+        "score": 92,
+        "reviewed_at": "2026-10-29T23:37:22"
+      }
+    },
+    "social_preview": {
+      "path": "assets/social-preview.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-29T21:37:48",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo-iris",
+        "method": "vision",
+        "notes": "Rendered at 1280x640 and inspected: the refracting beam, additive discs and white core occupy the left third, the Iris wordmark, kicker, three-line description and topic chips stay inside the safe area, and no glyph or chip is clipped.",
+        "score": 90,
+        "reviewed_at": "2026-10-29T23:37:36"
+      }
+    },
+    "social_preview_png": {
+      "path": "assets/social-preview.png",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-29T22:15:00",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo-iris",
+        "method": "vision",
+        "notes": "Checked the rendered PNG: exactly 1280x640, copies the SVG card without missing glyphs, the quantized palette keeps beam colors and chip text readable, and it matches the approved preview composition.",
+        "score": 88,
+        "reviewed_at": "2026-10-29T23:37:39"
+      }
+    }
+  },
+  "screenshots": []
+}

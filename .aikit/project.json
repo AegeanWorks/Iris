@@ -16,7 +16,22 @@
     "color"
   ],
   "gates": {},
-  "ui_required": false,
-  "mechanics_required": false,
-  "created": "2026-10-29"
+  "mechanics": {
+    "core": [
+      "src/game/engine.js",
+      "src/game/levels.js",
+      "src/game/solver.js"
+    ],
+    "test": "node --test tests/engine.test.js tests/levels.test.js tests/solver.test.js"
+  },
+  "ui_required": true,
+  "mechanics_required": true,
+  "created": "2026-10-29",
+  "has_ui": true,
+  "ui_kind": "game",
+  "ui_evidence": [
+    "index.html"
+  ],
+  "ui_checked_at": "2026-10-29",
+  "ui_source": "manual"
 }

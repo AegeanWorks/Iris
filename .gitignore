@@ -1,4 +1,4 @@
-# AIKit transient state
+﻿# AIKit transient state
 .aikit/*.lock
 .aikit/*.bak
 .aikit/*.tmp_*
@@ -6,3 +6,6 @@
 __pycache__/
 *.py[cod]
 node_modules/
+
+# local review captures and browser profiles
+.review/

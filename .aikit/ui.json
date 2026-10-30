@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "surfaces": {
+    "app": {
+      "paths": [
+        "index.html",
+        "src/**"
+      ]
+    }
+  },
+  "protected": [
+    "tests/**",
+    "src/**/*.test.*",
+    "src/**/*.spec.*",
+    "src/**/__tests__/**"
+  ],
+  "commands": {
+    "fast": "node --test tests",
+    "snapshot": "node scripts/ui-inventory.mjs",
+    "snapshot_timeout": 60
+  },
+  "style": {
+    "theme_paths": [
+      "src/theme.css"
+    ]
+  },
+  "limits": {
+    "max_files": 16,
+    "max_lines": 4200
+  }
+}
