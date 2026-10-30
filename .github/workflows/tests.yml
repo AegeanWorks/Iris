@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24]
+        node: [20, 22, 24]
     steps:
       - name: Check out Iris
         uses: actions/checkout@v4

@@ -1,15 +1,14 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-ci",
+    "task_id": "iris-ci-node20",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793360011.3165622,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793363155.1217833,
     "owner": "kilo:iris",
     "started_by": "kilo:iris",
-    "continuations": [],
-    "completed_at": 1793360192.5878272
+    "continuations": []
   },
   "checkpoints": [
     {
@@ -166,6 +165,41 @@
       "timestamp": 1793360192.587831,
       "timestamp_str": "2026-10-30 14:36:32",
       "agent": "kilo:iris"
+    },
+    {
+      "task_id": "iris-ci-node20",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Add Node 20, the declared engines floor, to the CI matrix and verify the suite and level checker there.",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793363154.8286858,
+      "timestamp_str": "2026-10-30 15:25:54",
+      "agent": "kilo:iris",
+      "impact_assessment": {
+        "why": "package.json promises Node 20 or newer, but CI only proved 22 and 24; a regression on the oldest supported runtime could reach master.",
+        "benefits": "The matrix now tests every declared major from the floor upward, so the README prerequisite and the actual CI agree.",
+        "risks": "contract: one matrix line; dependency: GitHub's Node 20 action support; concurrency: none; state: none.",
+        "mitigation": "Run the suite and the level checker under Node 20 locally, then let CI prove the matrix and keep the browser dogfood on Node 22."
+      }
+    },
+    {
+      "task_id": "iris-ci-node20",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Node 20 passes 73/73 tests and all twelve par checks; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793363155.1217833,
+      "timestamp_str": "2026-10-30 15:25:55",
+      "agent": "kilo:iris",
+      "handoff": {
+        "state": "1 modified file",
+        "next": "commit, push and watch the three-node matrix",
+        "failed": "none",
+        "open": "none",
+        "evidence": "local Node 20 run passes"
+      }
     }
   ]
 }
