@@ -103,15 +103,19 @@ iris/
 
 Iris is built to be copied into the AegeanWorks Live catalog under `docs/live/iris/<commit>/`. `PLAYABLE.md` lists the rules that keep that copy working: relative URLs only, all runtime files inside `index.html`, `src/` and `assets/`, no network calls, no service worker, no top-window navigation, and a semver `package.json` version.
 
-## Publishing to the AegeanWorks Live page
+## Live on AegeanWorks
 
-The Live page copies a commit-named build, so the website can point at Iris only after this repository exists with the game committed.
+Iris runs on the [AegeanWorks Live page](https://aegeanworks.github.io/AegeanWorks/play.html) as the **Iris** card. The website copies the commit-named build into `docs/live/iris/<commit>/`, shows its version, commit and digest, and checks it out in the daily `live.yml` workflow.
 
-1. Commit and publish this repository (AIKit: `python aikit.py check iris --strict`, then commit; `python aikit.py publish iris --public` creates `AegeanWorks/Iris`). Brand assets are already approved, so publish is not blocked by media review.
-2. In the website, add an `iris` entry to `APPS` in `tools/sync_live_apps.py` with `runtime: ("index.html", "src", "assets")`, `version_file: "package.json"` and `logo: "live/iris/logo.svg"`; add an Iris checkout step to `.github/workflows/live.yml`; list Iris in the `play.html` no-script fallback; bump the `live.json?v=` cache-buster; and add `iris` to the live test's expected slug set.
-3. Copy `assets/logo.svg` to `docs/live/iris/logo.svg`, then run `python tools/sync_live_apps.py --source-root .. --write` and `--check`, and commit the website changes. The daily workflow keeps the build current afterwards.
+To ship an update, commit and push to this repository; the daily workflow refreshes the website build from the new `HEAD`. To refresh immediately in an AegeanWorks checkout:
 
-Doing the website edits before the repository exists would make the daily live workflow fail on its checkout, so they belong in the publish step.
+```bash
+python tools/sync_live_apps.py --source-root .. --check-source
+python tools/sync_live_apps.py --source-root .. --write
+python tools/sync_live_apps.py --check
+```
+
+The website side already lists Iris in `APPS`, the `play.html` no-script fallback and its live tests; `PLAYABLE.md` is the static contract those checks enforce.
 
 <!-- aegean:brand-assets:start -->
 ## 🎨 Brand Assets
