@@ -1,15 +1,14 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-v1",
+    "task_id": "iris-ci",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793320178.8581367,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793359086.0479755,
     "owner": "kilo:iris",
     "started_by": "kilo:iris",
-    "continuations": [],
-    "completed_at": 1793344980.534064
+    "continuations": []
   },
   "checkpoints": [
     {
@@ -103,6 +102,41 @@
       "timestamp": 1793344980.5340652,
       "timestamp_str": "2026-10-30 10:23:00",
       "agent": "kilo:iris"
+    },
+    {
+      "task_id": "iris-ci",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/2] Add a GitHub Actions workflow that runs the Node tests, the level-parity checker and the UI inventory on Node 22 and 24, plus the browser dogfood on 22. [2/2] Push and confirm the workflow is green.",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793359085.1319513,
+      "timestamp_str": "2026-10-30 14:18:05",
+      "agent": "kilo:iris",
+      "impact_assessment": {
+        "why": "The game is published and synced by the website, but its own repository had no CI, so a broken engine, level or UI contract could reach master without a failing check.",
+        "benefits": "Every push and pull request now proves the 73 tests, the true-minimum par for all twelve chambers, the UI hook inventory and a real browser solve before the website sync can pick the commit up.",
+        "risks": "contract: the workflow must keep working on a clean runner with no install step; dependency: Node 22/24 and the runner's Chrome; concurrency: the website live workflow checks out the same master; state: none.",
+        "mitigation": "Use only zero-dependency commands already verified locally, let the dogfood skip when no browser exists, run the same steps locally, and watch the first GitHub run before calling it done."
+      }
+    },
+    {
+      "task_id": "iris-ci",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "CI workflow verified locally with 73/73 tests, twelve equal-par levels, the UI inventory and 5/5 project gates; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793359086.0479755,
+      "timestamp_str": "2026-10-30 14:18:06",
+      "agent": "kilo:iris",
+      "handoff": {
+        "state": "1 modified and 1 untracked",
+        "next": "commit and push, then watch the tests workflow",
+        "failed": "none",
+        "open": "none",
+        "evidence": "local CI steps identical to the workflow all pass"
+      }
     }
   ]
 }

@@ -4,7 +4,7 @@
 <p align="center"><img src="assets/social-preview.svg" alt="Iris social preview" width="100%"></p>
 <!-- aegean:media:end -->
 
-<p align="center"><a href="LICENSE"><img src="https://img.shields.io/badge/license-AGL--1.1-7048e8" alt="License"></a> <a href="https://github.com/AegeanWorks/AIKit"><img src="https://img.shields.io/badge/AIKit-integrated-6f42c1" alt="AIKit Integrated"></a></p>
+<p align="center"><a href="LICENSE"><img src="https://img.shields.io/badge/license-AGL--1.1-7048e8" alt="License"></a> <a href="https://github.com/AegeanWorks/AIKit"><img src="https://img.shields.io/badge/AIKit-integrated-6f42c1" alt="AIKit Integrated"></a> <a href="https://github.com/AegeanWorks/Iris/actions/workflows/tests.yml"><img src="https://github.com/AegeanWorks/Iris/actions/workflows/tests.yml/badge.svg" alt="Tests"></a></p>
 
 A neon color-mixing puzzle: route red, green and blue beams through rotating mirrors and dye cells, blend exact hues, and light every receiver across three episodes.
 
@@ -96,6 +96,9 @@ iris/
 ├── REUSE.toml              <- machine-readable SPDX metadata
 ├── README.md
 ├── .gitignore              <- transient AIKit state excluded
+├── .github/
+│   └── workflows/
+│       └── tests.yml       <- unit, level and browser dogfood checks on push and PR
 └── .aikit/                 <- this project's memory: record, ledger, decisions
 ```
 
