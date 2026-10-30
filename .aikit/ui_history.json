@@ -12,5 +12,19 @@
     "final_snapshot_digest": "cbab5a5e92bec57a86fbd791416dcda425485935ea5fbe810f369738603c0ecc",
     "final_snapshot_entries": 18,
     "surface_digest": "e868a67835fd2da065f47ab70fb833e81afaf06f4acc76cd81d24c917aca1d0d"
+  },
+  {
+    "schema": 1,
+    "surface": "app",
+    "baseline_commit": "3bbf88afa827532e27b07aa333572def19b886ec",
+    "contract_hash": "1233ddd9a08c873d678b19887fc8d023f5888c6b480423136ffa69fbeea14fb9",
+    "started_at": 1793372464.9647782,
+    "finished_at": 1793372577.126239,
+    "strikes": 0,
+    "reviewer": "agent:kilo-iris",
+    "allowed_removals": [],
+    "final_snapshot_digest": "63468159cacab5ccee6362ab4bfe288f1d943478ffb0e03095a9c42fb46eae19",
+    "final_snapshot_entries": 19,
+    "surface_digest": "88129f449a530730ce26e187e1fee24f9ec2f12b5b0820b06b521c75517fa7cf"
   }
 ]
