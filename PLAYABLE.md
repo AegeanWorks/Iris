@@ -47,7 +47,7 @@ the website sync fail instead of publishing a broken build.
 ## Verification before merging
 
 ```bash
-node --test tests
+node --test
 node scripts/check-levels.mjs
 node scripts/dogfood.mjs
 ```

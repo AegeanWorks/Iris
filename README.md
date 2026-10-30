@@ -24,7 +24,7 @@ Iris is a zero-install browser puzzle about additive light. Each chamber gives y
 - **Runtime Prerequisites**: Node.js 20 or newer for the local server, tests and tooling. Playing the game needs only a modern browser with ES modules; no package install, no build step and no backend.
 - **Canonical Regression Shield Gate**:
   ```bash
-  node --test tests
+  node --test
   ```
 
 ## Play locally
@@ -58,7 +58,7 @@ Color is a bit mask: red `1`, green `2`, blue `4`. Yellow is red + green, cyan i
 ## Verification
 
 ```bash
-node --test tests                 # 73 engine, level, progress, server and UI contract tests
+node --test                       # 73 engine, level, progress, server and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook

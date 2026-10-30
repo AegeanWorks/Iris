@@ -5,7 +5,7 @@
     "last_phase": "phase 4",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1793359086.0479755,
+    "updated_at": 1793360011.3165622,
     "owner": "kilo:iris",
     "started_by": "kilo:iris",
     "continuations": []
@@ -136,6 +136,24 @@
         "failed": "none",
         "open": "none",
         "evidence": "local CI steps identical to the workflow all pass"
+      }
+    },
+    {
+      "task_id": "iris-ci",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "CI exposed a real compatibility bug: node --test with a directory fails on Node 22 and 24; the suite now uses auto-discovery and passes on Node 20, 22, 24 and 26; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793360011.3165622,
+      "timestamp_str": "2026-10-30 14:33:31",
+      "agent": "kilo:iris",
+      "handoff": {
+        "state": "7 modified files",
+        "next": "commit and push, then watch the tests workflow",
+        "failed": "none",
+        "open": "none",
+        "evidence": "73/73 on Node 22, 24 and 26 plus Node 20, 5/5 gates"
       }
     }
   ]

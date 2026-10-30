@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Run the unit tests
-        run: node --test tests
+        run: node --test
       - name: Prove every chamber par is minimal
         run: node scripts/check-levels.mjs
       - name: Check the UI inventory

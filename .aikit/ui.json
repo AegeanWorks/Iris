@@ -15,7 +15,7 @@
     "src/**/__tests__/**"
   ],
   "commands": {
-    "fast": "node --test tests",
+    "fast": "node --test",
     "snapshot": "node scripts/ui-inventory.mjs",
     "snapshot_timeout": 60
   },

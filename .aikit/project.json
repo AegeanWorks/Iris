@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "name": "iris",
-  "test_command": "node --test tests",
+  "test_command": "node --test",
   "topics": [
     "aikit",
     "aikit-integrated",

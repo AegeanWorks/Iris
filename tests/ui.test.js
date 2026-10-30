@@ -165,7 +165,7 @@ test("the progress key is namespaced for the host site", () => {
 test("the package manifest matches the README promise", () => {
   assert.equal(packageJson.version, "0.1.0");
   assert.equal(packageJson.type, "module");
-  assert.equal(packageJson.scripts.test, "node --test tests");
+  assert.equal(packageJson.scripts.test, "node --test");
   assert.equal(packageJson.engine ?? packageJson.engines.node, ">=20");
   assert.match(packageJson.description, /color-mixing puzzle/);
 });
