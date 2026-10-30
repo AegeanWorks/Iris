@@ -28,10 +28,10 @@
   "mechanics_required": true,
   "created": "2026-10-29",
   "has_ui": true,
-  "ui_kind": "game",
+  "ui_kind": "web",
   "ui_evidence": [
     "index.html"
   ],
   "ui_checked_at": "2026-10-30",
-  "ui_source": "manual"
+  "ui_source": "detected"
 }
