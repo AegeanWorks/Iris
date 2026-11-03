@@ -103,3 +103,22 @@ test("createGame does not mutate the frozen level", () => {
   createGame(LEVELS[0]);
   assert.equal(JSON.stringify(LEVELS[0].solution), before);
 });
+
+test("solveLevel defaults null options to a full search", () => {
+  const full = solveLevel(LEVELS[0]);
+  const viaNull = solveLevel(LEVELS[0], null);
+  assert.equal(viaNull.par, full.par);
+  assert.equal(viaNull.searched, full.searched);
+  assert.equal(viaNull.truncated, false);
+});
+
+test("solveLevel validates its search limit", () => {
+  assert.throws(() => solveLevel(LEVELS[0], { limit: 0 }), RangeError);
+  assert.throws(() => solveLevel(LEVELS[0], { limit: -1 }), RangeError);
+  assert.throws(() => solveLevel(LEVELS[0], { limit: 1.5 }), RangeError);
+});
+
+test("solutionMoves throws on a solution that misses a mirror", () => {
+  const bad = { ...LEVELS[1], solution: { "2,1": "\\" } };
+  assert.throws(() => solutionMoves(bad), /every mirror/);
+});

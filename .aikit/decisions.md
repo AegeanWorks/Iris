@@ -46,3 +46,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: No screenshots existed; the game needs its static server (ES modules) and chamber views need a Play click.
 - **Decision**: Register `2026-11-03-title.png` (served title, headless Edge) and `2026-11-03-chamber.png` (same build after Playwright clicks Play, Chamber 01 zero-move state), viewport 1440x900, commit `279fa6c`, in `.aikit/media.json` and the README `aegean:screenshots` block.
 - **Consequences**: README proves title and real gameplay. Reproduce with the serve command plus headless `--screenshot`, then Playwright click and screenshot.
+
+### ADR-006: Harden validation, storage and server headers from swarm audit
+- **Date**: 2026-11-04
+- **Status**: Accepted
+- **Context**: Six-module swarm audit (engine, levels/solver, UI, progress/audio, server/tooling, styles/assets) returned reproduced defects: shallow-frozen levels, createGame tile bypass, solver null/limit handling, negative-star rating, save-without-store true, __proto__ map loss, 403/404 missing safe headers, hint-timer leak across screens, preview leak on dialog cancel, grid fallback mismatch, dead theme tokens, commercial license misnaming.
+- **Decision**: Always validate in createGame, deep-freeze prepared levels, validate solver options and solutionMoves, return truncated flag, guard rating/save/proto, send safe headers on errors, clear hint timers on screen leave, clear preview on win cancel, fix grid fallback, drop dead tokens, correct AGL-1.1 naming, with failing-first tests for each.
+- **Consequences**: No format or contract change; stricter fail-fast behavior, 84/84 tests green, check-levels and inventory green, aikit 5/5 green.

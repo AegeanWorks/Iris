@@ -272,11 +272,13 @@ function renderChambers() {
 }
 
 function showTitle() {
+  clearHintTimer();
   renderTitleProgress();
   setScreen("title");
 }
 
 function showChambers({ focus = true } = {}) {
+  clearHintTimer();
   renderChambers();
   setScreen("chambers", { focus });
 }
@@ -746,6 +748,7 @@ function wireEvents() {
   });
   refs.winDialog.addEventListener("cancel", (event) => {
     event.preventDefault();
+    state.preview = null;
     refs.winDialog.close();
     showChambers();
   });

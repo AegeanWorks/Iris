@@ -322,3 +322,21 @@ test("only a level with every receiver charged is solved", () => {
 test("COLORS has one entry per primary", () => {
   assert.deepEqual(Object.keys(COLORS).sort(), ["b", "g", "r"]);
 });
+
+test("validateLevel deep-freezes the prepared level", () => {
+  const prepared = validateLevel(level());
+  assert.ok(Object.isFrozen(prepared.emitters));
+  assert.ok(Object.isFrozen(prepared.receivers));
+  assert.ok(Object.isFrozen(prepared.rows));
+  assert.ok(Object.isFrozen(prepared.solution));
+  assert.throws(() => prepared.emitters.push({ x: 0, y: 0, color: "r", dir: "e" }));
+});
+
+test("createGame validates instead of trusting pre-existing tiles", () => {
+  const prepared = validateLevel(level());
+  const tampered = { ...prepared, tiles: [[null]], emitters: [] };
+  assert.throws(() => createGame(tampered), /at least one emitter/);
+  const staleTiles = { ...prepared, tiles: [[null]] };
+  const game = createGame(staleTiles);
+  assert.equal(traceGame(game).receivers.length, 1);
+});

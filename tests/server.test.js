@@ -81,9 +81,13 @@ test("the server serves the game, assets and a 404 with safe headers", async (t)
 
   const missing = await fetch(new URL("./src/missing.txt", url));
   assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get("cache-control"), "no-store");
+  assert.equal(missing.headers.get("x-content-type-options"), "nosniff");
 
   const privateFile = await fetch(new URL("./package.json", url));
   assert.equal(privateFile.status, 403);
+  assert.equal(privateFile.headers.get("cache-control"), "no-store");
+  assert.equal(privateFile.headers.get("x-content-type-options"), "nosniff");
 
   const tests = await fetch(new URL("./tests/engine.test.js", url));
   assert.equal(tests.status, 403);

@@ -172,3 +172,18 @@ test("the package manifest matches the README promise", () => {
   assert.equal(packageJson.engine ?? packageJson.engines.node, ">=20");
   assert.match(packageJson.description, /color-mixing puzzle/);
 });
+
+test("the theme keeps no dead tokens", () => {
+  assert.doesNotMatch(theme, /--iris-deep/);
+  assert.doesNotMatch(theme, /--danger/);
+  assert.doesNotMatch(theme, /--tile:/);
+});
+
+test("leaving the board clears a pending hint timer", () => {
+  assert.match(app, /function showTitle\(\) \{\s*clearHintTimer\(\)/);
+  assert.match(app, /function showChambers\([^)]*\) \{\s*clearHintTimer\(\)/);
+});
+
+test("win cancel clears preview state", () => {
+  assert.match(app, /state\.preview = null;\s*refs\.winDialog\.close\(\)/);
+});

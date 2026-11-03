@@ -216,3 +216,30 @@ test("a throwing localStorage getter does not abort startup", () => {
     }
   }
 });
+
+test("ratingFor rejects negative moves", () => {
+  assert.equal(ratingFor(-5, 3), 1);
+  assert.equal(ratingFor(-1, 0), 1);
+});
+
+test("normalizeProgress ignores __proto__ level ids", () => {
+  const normalized = normalizeProgress({
+    version: 1,
+    solved: { __proto__: { bestMoves: 1, stars: 3 } },
+    settings: { sound: true },
+    lastLevel: null,
+  });
+  assert.deepEqual(Object.keys(normalized.solved), []);
+});
+
+test("saveProgress reports false when no store exists", () => {
+  const descriptor = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+  delete globalThis.localStorage;
+  try {
+    assert.equal(saveProgress(defaultProgress(), undefined), false);
+  } finally {
+    if (descriptor) {
+      Object.defineProperty(globalThis, "localStorage", descriptor);
+    }
+  }
+});

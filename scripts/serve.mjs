@@ -79,7 +79,12 @@ function isPublic(filePath, base = root) {
 async function handler(request, response) {
   const filePath = safePath(request.url ?? "/");
   if (!filePath || !isPublic(filePath)) {
-    response.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" }).end("Forbidden");
+    response.writeHead(403, {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "no-referrer",
+    }).end("Forbidden");
     return;
   }
   try {
@@ -94,7 +99,12 @@ async function handler(request, response) {
     });
     response.end(body);
   } catch {
-    response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" }).end("Not found");
+    response.writeHead(404, {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "no-referrer",
+    }).end("Not found");
   }
 }
 
