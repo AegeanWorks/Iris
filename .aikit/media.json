@@ -56,5 +56,44 @@
       }
     }
   },
-  "screenshots": []
+  "screenshots": [
+    {
+      "path": "assets/screenshots/2026-11-03-title.png",
+      "alt": "Iris title at 2026-11-03",
+      "caption": "Title from node scripts/serve.mjs (http://127.0.0.1:4176): additive discs, Play, 12 chambers.",
+      "commit": "279fa6c27b350fc65d656dfe13f26aa948d8cc39",
+      "taken_at": "2026-11-03",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "vision",
+        "notes": "Real headless-Edge capture of the served title: headline, discs, buttons and chamber count all legible.",
+        "score": 93,
+        "reviewed_at": "2026-11-03"
+      }
+    },
+    {
+      "path": "assets/screenshots/2026-11-03-chamber.png",
+      "alt": "Iris chamber 1 at 2026-11-03",
+      "caption": "Same build after Play: Chamber 01 First Light, red beam on mirror, 0 moves, par 1.",
+      "commit": "279fa6c27b350fc65d656dfe13f26aa948d8cc39",
+      "taken_at": "2026-11-03",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "vision",
+        "notes": "Real Playwright capture after clicking Play: grid, beam, mirror, receiver, moves/par and hint line all legible; zero-move fresh state.",
+        "score": 93,
+        "reviewed_at": "2026-11-03"
+      }
+    }
+  ]
 }

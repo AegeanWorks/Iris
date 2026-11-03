@@ -130,3 +130,13 @@ The website side already lists Iris in `APPS`, the `play.html` no-script fallbac
 ## 📜 License
 
 Free for personal play under the Aegean Game License 1.1 (AGL-1.1); see [LICENSE](LICENSE). It is DRM-free: Licensor ships no DRM and a distributor may not add it. Streaming, modding and free mods are allowed. Commercial use, paid mods and AI training need the Aegean Commercial License 1.0 (ACL-1.0); see [COMMERCIAL.md](COMMERCIAL.md).
+
+<!-- aegean:screenshots:start -->
+## Screenshots
+
+<a href="https://github.com/AegeanWorks/Iris/commit/279fa6c"><img src="assets/screenshots/2026-11-03-title.png" alt="Iris title at 2026-11-03"></a>
+
+<a href="https://github.com/AegeanWorks/Iris/commit/279fa6c"><img src="assets/screenshots/2026-11-03-chamber.png" alt="Iris chamber 1 at 2026-11-03"></a>
+
+*commit `279fa6c` · 2026-11-03 · viewport 1440x900 · title plus Chamber 01 after Play*
+<!-- aegean:screenshots:end -->

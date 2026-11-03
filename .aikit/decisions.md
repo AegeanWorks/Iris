@@ -39,3 +39,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The website copies the game into `docs/live/iris/<commit>/` and runs it in a same-origin iframe with its own service worker and storage.
 - **Decision**: The game ships only `index.html`, `src/` and `assets/`, uses relative URLs, makes no network call, registers no service worker, never navigates the top window, and stores progress under `iris.progress.v1`. The `PLAYABLE.md` contract records these rules and the website's `validate_source` passes against the project.
 - **Consequences**: Opening the file from disk does not work (ES modules); `play.cmd`/`play.sh` start a local static server. Any future runtime asset must stay inside the three copied paths or the website allowlist must change in the same step.
+
+### ADR-005: First screenshot keepers are title plus Chamber 01
+- **Date**: 2026-11-03
+- **Status**: Accepted
+- **Context**: No screenshots existed; the game needs its static server (ES modules) and chamber views need a Play click.
+- **Decision**: Register `2026-11-03-title.png` (served title, headless Edge) and `2026-11-03-chamber.png` (same build after Playwright clicks Play, Chamber 01 zero-move state), viewport 1440x900, commit `279fa6c`, in `.aikit/media.json` and the README `aegean:screenshots` block.
+- **Consequences**: README proves title and real gameplay. Reproduce with the serve command plus headless `--screenshot`, then Playwright click and screenshot.
