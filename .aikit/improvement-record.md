@@ -384,3 +384,14 @@ No new bug, gap or improvement candidate survived. Gates stayed green at 114/114
 Range `e3249c6..67b1df0` (32 commits: the 23 original improvement commits plus the audio-exit, sticky-footer and reset-status wave fixes). Final scripted campaign replay: all 12 chambers lit, 36/36 stars, every victory saved (`final-campaign-2/`). Full gates green: 114/114 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5.
 
 No new bug, gap or improvement candidate survived the full range. Pushed in the 1→End wave.
+
+## Reverse sweep End→1 — clean, beginning reached
+
+Audited the complete `e3249c6..608319e` diff and the newest wave fixes at the three supported widths:
+
+- 1440 help with the sticky footer: the footer top border is visible, the actions sit inside the panel and no content is clipped; the field guide still opens at its heading.
+- 390 help: sticky Begin at y=737–824; 320 help: footer visible and checked by the dogfood.
+- Reset status and screen-exit audio stop are covered by the reset-status pair, the stop graph and the final scripted campaign.
+- Final gates: 114/114 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5.
+
+No regression or new candidate survived. The sweep has reached the base commit `e3249c6`; the expand-and-return loop is complete.
