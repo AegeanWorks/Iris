@@ -9,7 +9,9 @@ import {
   TOTAL_CHAMBERS,
   TOTAL_STARS,
   episodeForLevel,
+  isEpisodeFinal,
   levelsForEpisode,
+  nextEpisodeForLevel,
 } from "../src/game/levels.js";
 import { solutionMoves, solveLevel } from "../src/game/solver.js";
 
@@ -82,6 +84,19 @@ test("every stored solution is itself a minimum route", () => {
   for (const level of LEVELS) {
     assert.equal(solutionMoves(level), level.par, `${level.id} solution is not optimal`);
   }
+});
+
+test("episode finales and the next episode follow the authored order", () => {
+  for (const episode of EPISODES) {
+    const levels = levelsForEpisode(episode.number);
+    assert.equal(isEpisodeFinal(levels[0]), false);
+    assert.equal(isEpisodeFinal(levels[levels.length - 1]), true);
+    assert.equal(levels.filter((level) => isEpisodeFinal(level)).length, 1);
+  }
+  assert.equal(nextEpisodeForLevel(LEVELS[0]).number, 2);
+  assert.equal(nextEpisodeForLevel(LEVELS[3]).number, 2);
+  assert.equal(nextEpisodeForLevel(LEVELS[7]).number, 3);
+  assert.equal(nextEpisodeForLevel(LEVELS[11]), null);
 });
 
 test("The Vault uses the wall tile", () => {

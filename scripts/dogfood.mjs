@@ -668,7 +668,42 @@ async function main() {
     if (narrowHelp.headingTop < narrowHelp.dialogTop - 1 || narrowHelp.overflow) {
       throw new Error(`The field guide is clipped on a narrow screen: ${JSON.stringify(narrowHelp)}.`);
     }
-    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, Z/R/H shortcuts, hint, hint/charge/uncharge/win audio, in-game help, labeled mixing key, preview and responsive board.");
+
+    await connection.send("Emulation.setDeviceMetricsOverride", {
+      width: 1440,
+      height: 900,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    await connection.send("Page.navigate", { url: `${url}?level=the-vault&preview=victory` });
+    await wait(800);
+    const episodeWin = await connection.evaluate(`(() => {
+      const episode = document.getElementById('win-episode');
+      return {
+        kicker: document.getElementById('win-kicker').textContent,
+        text: episode.textContent,
+        hidden: episode.hidden
+      };
+    })()`);
+    if (episodeWin.kicker !== "Episode I complete" || episodeWin.hidden ||
+        !episodeWin.text.startsWith("Episode II")) {
+      throw new Error(`The Episode I finale was not marked: ${JSON.stringify(episodeWin)}.`);
+    }
+    await connection.send("Page.navigate", { url: `${url}?level=white-crown&preview=victory` });
+    await wait(800);
+    const campaignWin = await connection.evaluate(`(() => {
+      const episode = document.getElementById('win-episode');
+      return {
+        kicker: document.getElementById('win-kicker').textContent,
+        text: episode.textContent,
+        hidden: episode.hidden
+      };
+    })()`);
+    if (campaignWin.kicker !== "Campaign complete" || campaignWin.hidden ||
+        !campaignWin.text.includes("All three episodes complete")) {
+      throw new Error(`The campaign finale was not marked: ${JSON.stringify(campaignWin)}.`);
+    }
+    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, Z/R/H shortcuts, hint, hint/charge/uncharge/win audio, in-game help, labeled mixing key, episode/campaign finales, preview and responsive board.");
     return 0;
   } catch (error) {
     console.error(`[FAIL] Iris dogfood: ${error.message}`);

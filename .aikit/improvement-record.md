@@ -2,7 +2,7 @@
 
 Continuous improvement cycles for Iris. One area per cycle. Each entry names the defect evidence, the fix, the screenshot pair and the played run. Screenshot files live outside the repository in `scratch/iris-evidence/cycle-N/` and are not committed; binaries never enter the tree.
 
-Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3), progression and saves (cycle 4), levels (cycle 5), input feel (cycle 6).
+Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3), progression and saves (cycles 4 and 7), levels (cycle 5), input feel (cycle 6).
 
 ## Cycle 1 — 2026-11-07 — UI readability: field-guide mixing key
 
@@ -167,3 +167,32 @@ Dead ends: binding `Ctrl+Z` would collide with browser undo; plain letters avoid
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** The win dialog still opens on its first button, which can scroll its heading out of view at 320x568. Episode and campaign completion still use the same ordinary victory dialog.
+
+## Cycle 7 — 2026-11-07 — Progression, pass 2: episode and campaign finales
+
+**Find.** The fourth chamber of each episode and the twelfth chamber ended a chapter, but `?level=the-vault&preview=victory` still said `Chamber 04 complete` and `?level=white-crown&preview=victory` said `Chamber 12 complete`, identical to an ordinary chamber (`cycle-07/before-vault-victory-1440.png`, `cycle-07/before-crown-victory-1440.png`). Nothing told the player that Episode II was next or that the campaign was over.
+
+Dead end checked first: the deferred win-dialog focus issue did not reproduce. At 320x568 the victory dialog is short enough that the heading stays visible (`scrollTop 0`); at 568x320 the dialog scrolls 24px but the kicker, heading, stars, summary and buttons all remain visible. Killed; no fix made.
+
+**Analyze.** Survivors:
+1. Mark the last chamber of each episode with `Episode <numeral> complete` and add a callout naming the next episode.
+2. Mark the twelfth chamber with `Campaign complete` and a spectrum-complete callout.
+3. Derive both from the authored level order so a future level edit cannot desync the copy.
+Dead ends: focusing the win heading to fix a scroll that does not occur; dropped.
+
+**Implement.** `src/game/levels.js` adds `isEpisodeFinal(level)` and `nextEpisodeForLevel(level)`. `src/ui/app.js` uses them in `finishLevel()` and fills a new `#win-episode` callout with `Episode II — Mixing awaits.` or `All three episodes complete. The spectrum is yours.`. `src/styles.css` styles the callout as a bordered accent line. The dogfood checks both preview finales, and a real played run confirms the Episode I close and the Next transition.
+
+**Proof.**
+- The Vault pair, same victory preview state and 1440x900 viewport: `cycle-07/pair-vault-victory-1440.png`. Before: `CHAMBER 04 COMPLETE`; after: `EPISODE I COMPLETE` plus `Episode II — Mixing awaits.`
+- White Crown pair, same state: `cycle-07/pair-crown-victory-1440.png`. Before: `CHAMBER 12 COMPLETE`; after: `CAMPAIGN COMPLETE` plus `All three episodes complete. The spectrum is yours.`
+- Played run: with the first three chambers saved, Play opened The Vault; four rotations won at par with three stars, the dialog read `Episode I complete`, the Next button was visible, and Next opened `Chamber 05 · Episode II · Mixing / Yellow Room` at zero moves (`cycle-07/play/`).
+- Failing-first: the new level helper import failed before the helpers existed; the dogfood finale checks were added with the implementation and pass.
+
+**Gates.**
+- `node --test` → 105 pass, 0 fail (was 103).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including both finale checks, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** The field guide still has no symbol key for emitters, mirrors, dyes and receivers; the legend covers mixing but not the board glyphs. Turning sound off still does not stop already-scheduled tones.

@@ -1027,6 +1027,16 @@ button {
   color: var(--text);
 }
 
+.win-episode {
+  margin: 0 0 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--iris);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
 .win-grid {
   display: flex;
   gap: 28px;

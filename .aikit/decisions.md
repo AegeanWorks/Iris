@@ -95,3 +95,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The board supported arrow keys and Enter/Space, but undo, reset and hint still required a pointer. A keyboard-only player could rotate but could not recover, restart or ask for a hint without leaving the keys, and the field guide never listed the available keys.
 - **Decision**: Add a document `keydown` handler for `Z` (undo), `R` (reset) and `H` (hint). Ignore modified chords, text inputs, dialogs, non-game screens and a won board. Add `aria-keyshortcuts` to the three buttons and a `Shortcuts: Z undo, R reset, H hint` rule to the field guide.
 - **Consequences**: No pointer, save, audio or level behavior changes. The browser dogfood presses all three keys and checks the resulting moves, hint ghost and orientation, and a help-dialog pair shows the new rule. 103/103 tests are green.
+
+### ADR-013: Mark episode and campaign finales in the victory dialog
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The fourth chamber of each episode and the twelfth chamber ended a chapter, but their victory dialogs said `Chamber 04 complete` and `Chamber 12 complete`, identical to an ordinary chamber. The player got no signal that Episode II was unlocked or that the campaign was over.
+- **Decision**: Add `isEpisodeFinal(level)` and `nextEpisodeForLevel(level)` to the level model. The victory kicker becomes `Episode <numeral> complete` for an episode finale and `Campaign complete` for the last chamber; a new `#win-episode` callout says `Episode <next> — <name> awaits.` or `All three episodes complete. The spectrum is yours.` Ordinary chambers keep the old kicker and hide the callout.
+- **Consequences**: No save, level, dependency or input change. Preview victories still show the same copy, but no unlock is recorded. 105/105 tests are green; a played run through The Vault shows the Episode I close and Next opens Yellow Room in Episode II.

@@ -1,64 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-06",
+    "task_id": "iris-cycle-07",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794081653.8910859,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794082297.3536954,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794081702.5284126
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-03",
-      "phase": "planning",
-      "phase_num": 2,
-      "description": "[1/4] Audio cues: give hints their own cue and add a losing-charge cue, driven by a pure trace-difference helper, proven by new unit tests and a browser audio log during a played Crossroads run",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794079548.505262,
-      "timestamp_str": "2026-11-07 22:25:48",
-      "agent": "opencode:iris-cycle",
-      "impact_assessment": {
-        "why": "The hint currently reuses the dye cue and the unused error cue never plays. When a rotation uncharges a receiver the only feedback is visual, and the old count comparison cannot distinguish a receiver that charges from one that loses charge in the same move.",
-        "benefits": "Players hear a distinct hint ping and an audible loss when a route breaks; charge and uncharge are derived from the exact receiver set before and after the move rather than a net count, and the audio module finally has direct tests.",
-        "risks": "contract: PLAYABLE.md still ships no audio files; dependency: none; concurrency: none; state: no progress or save change.",
-        "mitigation": "Keep all cues generated in audio.js, add a one-function feedback module, record oscillator frequencies in the browser dogfood, and run the full campaign plus the existing hint, undo and sound-toggle checks."
-      },
-      "plan_digest": "15ff63fac882b4aae1cfd32baa5abd49d748d06cf2b52b7f3f5c71efa53fd3a3"
-    },
-    {
-      "task_id": "iris-cycle-03",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Added the trace-difference feedback helper, distinct hint and uncharge cues, app wiring and browser oscillator logging, with 11 new audio/feedback tests and a played Crossroads audio run",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794080068.3861628,
-      "timestamp_str": "2026-11-07 22:34:28",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-03",
-      "phase": "verification",
-      "phase_num": 4,
-      "description": "[4/4] Verification complete; checklists: passed; 98/98 node tests, 11 new audio/feedback tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with hint/charge/uncharge/win audio, aikit 5/5 gates; played Crossroads run recorded the oscillator graph for charge, uncharge and win",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794080076.0548291,
-      "timestamp_str": "2026-11-07 22:34:36",
-      "agent": "opencode:iris-cycle",
-      "handoff": {
-        "state": "6 modified and 2 untracked files ready for explicit staging",
-        "next": "commit cycle 3, then start cycle 4 on progression and saves",
-        "failed": "none",
-        "open": "pre-existing UI contract delivery warning, sound-off does not stop scheduled tones, win-dialog narrow-screen focus",
-        "evidence": ".aikit/improvement-record.md cycle 3, scratch/iris-evidence/cycle-03"
-      }
-    },
     {
       "task_id": "iris-cycle-03",
       "phase": "completed",
@@ -281,6 +233,53 @@
       "timestamp": 1794081702.5284145,
       "timestamp_str": "2026-11-07 23:01:42",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-07",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Added episode-final helpers, the win-episode callout and finale copy, with a failing-first helper test, two preview checks, and a real The Vault to Yellow Room played run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082253.1623058,
+      "timestamp_str": "2026-11-07 23:10:53",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-07",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Progression pass 2: mark each episode finale and the campaign finale in the victory dialog, proven by same-state The Vault and White Crown pairs plus a played The Vault to Yellow Room transition",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082283.5467088,
+      "timestamp_str": "2026-11-07 23:11:23",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "The fourth chamber of each episode and the twelfth chamber end a chapter, but their victory dialogs use the same ordinary Chamber NN complete copy as every other chamber, so the player gets no signal that a new episode or the end of the campaign has arrived.",
+        "benefits": "Episode I, II and III finales name the closing episode and the next one, and the twelfth chamber names the campaign complete; the copy is derived from the authored level order so future edits cannot desync it.",
+        "risks": "contract: level order and par remain frozen; dependency: none; concurrency: none; state: no save-format change, preview victories still record nothing.",
+        "mitigation": "Add pure episode-final helpers with tests, use them in finishLevel, check both previews in the browser dogfood, and play The Vault through to the Next transition."
+      },
+      "plan_digest": "d073dac9b47e7d91643f13514f22a47670692a0f04a31411face3c858961575a"
+    },
+    {
+      "task_id": "iris-cycle-07",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 105/105 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with both finale checks, aikit 5/5 gates; The Vault and White Crown pairs plus a played Episode I to Episode II transition recorded",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082297.3536954,
+      "timestamp_str": "2026-11-07 23:11:37",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "10 modified files ready for explicit staging",
+        "next": "commit cycle 7, then decide whether the field-guide symbol key is the next verified improvement",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, sound-off does not stop scheduled tones",
+        "evidence": ".aikit/improvement-record.md cycle 7, scratch/iris-evidence/cycle-07"
+      }
     }
   ]
 }

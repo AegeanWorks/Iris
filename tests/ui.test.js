@@ -145,6 +145,13 @@ test("the field guide lists the keyboard shortcuts", () => {
   assert.match(app, /document\.addEventListener\("keydown", handleShortcut\)/);
 });
 
+test("the victory dialog marks episode and campaign finales", () => {
+  assert.match(html, /id="win-episode" hidden/);
+  assert.match(app, /winEpisode: required\("win-episode"\)/);
+  assert.match(app, /isEpisodeFinal\(state\.level\)/);
+  assert.match(app, /Episode \$\{nextEpisode\.numeral\}/);
+});
+
 test("the field guide opens at its heading", () => {
   assert.match(html, /id="help-heading" tabindex="-1"/);
   assert.match(app, /helpHeading: required\("help-heading"\)/);

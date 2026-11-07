@@ -15,7 +15,9 @@ import {
   TOTAL_CHAMBERS,
   TOTAL_STARS,
   episodeForLevel,
+  isEpisodeFinal,
   levelsForEpisode,
+  nextEpisodeForLevel,
 } from "../game/levels.js";
 import { createAudio } from "./audio.js";
 import { feedbackCues } from "./feedback.js";
@@ -69,6 +71,7 @@ const refs = {
   winHeading: required("win-heading"),
   winStars: required("win-stars"),
   winSummary: required("win-summary"),
+  winEpisode: required("win-episode"),
   winMoves: required("win-moves"),
   winPar: required("win-par"),
   winBest: required("win-best"),
@@ -595,9 +598,22 @@ function finishLevel({ preview = false } = {}) {
   };
   const index = LEVELS.indexOf(state.level);
   const next = LEVELS[index + 1] ?? null;
-  refs.winKicker.textContent = `Chamber ${String(index + 1).padStart(2, "0")} complete`;
+  const episode = episodeForLevel(state.level);
+  const episodeFinal = isEpisodeFinal(state.level);
+  const nextEpisode = nextEpisodeForLevel(state.level);
+  refs.winKicker.textContent = episodeFinal
+    ? nextEpisode
+      ? `Episode ${episode.numeral} complete`
+      : "Campaign complete"
+    : `Chamber ${String(index + 1).padStart(2, "0")} complete`;
   refs.winHeading.textContent = state.level.name;
   refs.winStars.replaceChildren(starsMarkup(stars, `${stars} of 3 stars`));
+  refs.winEpisode.hidden = !episodeFinal;
+  refs.winEpisode.textContent = episodeFinal
+    ? nextEpisode
+      ? `Episode ${nextEpisode.numeral} — ${nextEpisode.name} awaits.`
+      : "All three episodes complete. The spectrum is yours."
+    : "";
   refs.winSummary.textContent =
     stars === 3
       ? "Perfect routing: every beam landed at par."

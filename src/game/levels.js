@@ -375,3 +375,12 @@ export function levelsForEpisode(number) {
 export function episodeForLevel(level) {
   return EPISODES.find((episode) => episode.number === level.episode) ?? EPISODES[0];
 }
+
+export function isEpisodeFinal(level) {
+  const levels = levelsForEpisode(level.episode);
+  return levels.length > 0 && levels[levels.length - 1].id === level.id;
+}
+
+export function nextEpisodeForLevel(level) {
+  return EPISODES.find((episode) => episode.number === level.episode + 1) ?? null;
+}
