@@ -3,32 +3,15 @@
   "active_task": {
     "task_id": "iris-cycle-08",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794082814.4033787,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794082844.6792853
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-05",
-      "phase": "planning",
-      "phase_num": 2,
-      "description": "[1/4] Levels: give The Vault two wall blocks that frame the chamber, teach the wall tile in the field guide and README, and prove the episode finale still solves at par 4 with a before/after board pair and a played run",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794080977.2028275,
-      "timestamp_str": "2026-11-07 22:49:37",
-      "agent": "opencode:iris-cycle",
-      "impact_assessment": {
-        "why": "The engine validates, renders and tests walls, but no chamber uses one, so the wall tile is dead content and The Vault reads as an empty 7x7 frame with four floating mirrors. The chamber named The Vault has no vault structure.",
-        "benefits": "The Episode I finale gains visual structure and finally exercises the wall renderer; the field guide and symbol table explain that walls stop a beam; the existing unique four-move solution and par stay unchanged.",
-        "risks": "contract: level rows and solver par are frozen by tests; dependency: none; concurrency: none; state: no save-format change.",
-        "mitigation": "Place walls only on cells that no solution beam crosses, verify the stored solution and the true minimum with check-levels and the solver suite, add a UI assertion for the wall copy, and replay the chamber end to end."
-      },
-      "plan_digest": "2c14b4068381af12ce4a3fe9dc2e1e8a68c810e9157176be2b497fa4d8c4fe17"
-    },
     {
       "task_id": "iris-cycle-04",
       "phase": "superseded",
@@ -280,6 +263,16 @@
         "open": "pre-existing UI contract delivery warning, scheduled tones survive mute",
         "evidence": ".aikit/improvement-record.md cycle 8, scratch/iris-evidence/cycle-08"
       }
+    },
+    {
+      "task_id": "iris-cycle-08",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-cycle-08' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794082844.6792874,
+      "timestamp_str": "2026-11-07 23:20:44",
+      "agent": "opencode:iris-cycle"
     }
   ]
 }
