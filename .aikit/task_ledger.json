@@ -3,32 +3,15 @@
   "active_task": {
     "task_id": "iris-wave-1-15",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794085958.2840579,
     "owner": "opencode:iris-wave",
     "started_by": "opencode:iris-wave",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794085972.4538388
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-08",
-      "phase": "verification",
-      "phase_num": 4,
-      "description": "[4/4] Verification complete; checklists: passed; 106/106 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with board-symbol and mixing keys, aikit 5/5 gates; 1440 and 390 help pairs plus 320 overflow measurements recorded",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794082814.4033787,
-      "timestamp_str": "2026-11-07 23:20:14",
-      "agent": "opencode:iris-cycle",
-      "handoff": {
-        "state": "7 modified files ready for explicit staging",
-        "next": "commit cycle 8, then consider sound-off cancellation or another verified finding",
-        "failed": "none",
-        "open": "pre-existing UI contract delivery warning, scheduled tones survive mute",
-        "evidence": ".aikit/improvement-record.md cycle 8, scratch/iris-evidence/cycle-08"
-      }
-    },
     {
       "task_id": "iris-cycle-08",
       "phase": "completed",
@@ -302,6 +285,16 @@
         "open": "pre-existing UI delivery warning",
         "evidence": ".aikit/improvement-record.md wave 1->15, scratch/iris-evidence/wave-1-15"
       }
+    },
+    {
+      "task_id": "iris-wave-1-15",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-wave-1-15' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794085972.4538417,
+      "timestamp_str": "2026-11-08 00:12:52",
+      "agent": "opencode:iris-wave"
     }
   ]
 }
