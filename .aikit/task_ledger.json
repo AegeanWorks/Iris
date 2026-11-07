@@ -1,107 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-04",
-    "last_phase": "verification",
-    "active_phase": 4,
+    "task_id": "iris-cycle-05",
+    "last_phase": "resumed",
+    "active_phase": 2,
     "status": "in_progress",
-    "updated_at": 1794080744.8919563,
+    "updated_at": 1794081014.9591904,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-ci-node20",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Node 20 passes 73/73 tests and all twelve par checks; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793363155.1217833,
-      "timestamp_str": "2026-10-30 15:25:55",
-      "agent": "kilo:iris",
-      "handoff": {
-        "state": "1 modified file",
-        "next": "commit, push and watch the three-node matrix",
-        "failed": "none",
-        "open": "none",
-        "evidence": "local Node 20 run passes"
-      }
-    },
-    {
-      "task_id": "iris-ci-node20",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-ci-node20' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793363970.165766,
-      "timestamp_str": "2026-10-30 15:39:30",
-      "agent": "kilo:iris"
-    },
-    {
-      "task_id": "iris-help",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/2] Add an in-game Help control that opens the field guide and labels the close action for the board. [2/2] Verify the UI contract, browser dogfood, version 0.2.0 and the Live refresh.",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793372443.378183,
-      "timestamp_str": "2026-10-30 18:00:43",
-      "agent": "kilo:iris",
-      "impact_assessment": {
-        "why": "Once a chamber opens, the field guide is unreachable without abandoning the route, which is a real usability gap for a first-time player.",
-        "benefits": "Players can reopen the rules mid-chamber, the close button says what it does, and the version advances to 0.2.0 for the website label.",
-        "risks": "contract: a new UI control and inventory entry; dependency: none; concurrency: the website live sync may refresh other apps; state: local progress schema is unchanged.",
-        "mitigation": "Cover the control in the UI inventory, require the id in the shell tests, exercise open and close in the browser dogfood, then run the UI contract and strict gates."
-      }
-    },
-    {
-      "task_id": "iris-help",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "In-game Help opens the field guide with a board-specific close label; 73/73 tests, dogfood, 5/5 gates and media audit pass; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793372443.7545543,
-      "timestamp_str": "2026-10-30 18:00:43",
-      "agent": "kilo:iris",
-      "handoff": {
-        "state": "6 modified files plus bookkeeping",
-        "next": "commit, record the UI task, push and refresh the Live build",
-        "failed": "none",
-        "open": "UI contract needs a new finished task",
-        "evidence": "dogfood OK, test suite OK"
-      }
-    },
-    {
-      "task_id": "iris-help",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-help' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793372652.3372889,
-      "timestamp_str": "2026-10-30 18:04:12",
-      "agent": "kilo:iris"
-    },
-    {
-      "task_id": "iris-cycle-01",
-      "phase": "planning",
-      "phase_num": 2,
-      "description": "[1/4] UI readability: replace the field guide's 13 unlabeled color dots with labeled mixing equations, proven by a same-viewport screenshot pair and a scripted help-dialog run",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794075700.8759897,
-      "timestamp_str": "2026-11-07 21:21:40",
-      "agent": "opencode:iris-cycle",
-      "impact_assessment": {
-        "why": "The field guide's mixing row renders 13 color discs with no text, labels, plus signs or equals signs; textContent is empty and the row is aria-hidden, so a first-time player gets no usable mixing reference from the help they just opened.",
-        "benefits": "The help dialog teaches red+green=yellow, green+blue=cyan, red+blue=magenta and all three=white in readable text, matching the in-game legend; the fix is static HTML/CSS with no runtime or dependency change.",
-        "risks": "contract: PLAYABLE.md static asset and relative URL rules; dependency: none; concurrency: none; state: no progress or save format change.",
-        "mitigation": "Keep the markup inside index.html with existing color tokens, add a failing UI test before the change, extend dogfood to assert the visible equation labels, and run the canonical node --test plus aikit check iris."
-      },
-      "plan_digest": "3c71feca3221c42ca3197343f103a4829afd44d1dcd27b37c41d986946ff7f90"
-    },
     {
       "task_id": "iris-cycle-01",
       "phase": "implementation",
@@ -301,6 +210,76 @@
         "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
         "evidence": ".aikit/improvement-record.md cycle 4, scratch/iris-evidence/cycle-04"
       }
+    },
+    {
+      "task_id": "iris-cycle-05",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Levels: give The Vault two wall blocks that frame the chamber, teach the wall tile in the field guide and README, and prove the episode finale still solves at par 4 with a before/after board pair and a played run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794080977.2028275,
+      "timestamp_str": "2026-11-07 22:49:37",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "The engine validates, renders and tests walls, but no chamber uses one, so the wall tile is dead content and The Vault reads as an empty 7x7 frame with four floating mirrors. The chamber named The Vault has no vault structure.",
+        "benefits": "The Episode I finale gains visual structure and finally exercises the wall renderer; the field guide and symbol table explain that walls stop a beam; the existing unique four-move solution and par stay unchanged.",
+        "risks": "contract: level rows and solver par are frozen by tests; dependency: none; concurrency: none; state: no save-format change.",
+        "mitigation": "Place walls only on cells that no solution beam crosses, verify the stored solution and the true minimum with check-levels and the solver suite, add a UI assertion for the wall copy, and replay the chamber end to end."
+      },
+      "plan_digest": "2c14b4068381af12ce4a3fe9dc2e1e8a68c810e9157176be2b497fa4d8c4fe17"
+    },
+    {
+      "task_id": "iris-cycle-04",
+      "phase": "superseded",
+      "phase_num": 4,
+      "description": "Superseded by 'iris-cycle-05' without --complete or --reset",
+      "status": "superseded",
+      "timestamp": 1794080977.2028275,
+      "timestamp_str": "2026-11-07 22:49:37",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-05",
+      "phase": "suspended",
+      "phase_num": 2,
+      "description": "Task 'iris-cycle-05' suspended: complete cycle 4 bookkeeping first",
+      "status": "suspended",
+      "timestamp": 1794081013.0528557,
+      "timestamp_str": "2026-11-07 22:50:13",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-04",
+      "phase": "resumed",
+      "phase_num": 4,
+      "description": "Resumed 'iris-cycle-04' after a pause",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081013.7226436,
+      "timestamp_str": "2026-11-07 22:50:13",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-04",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-cycle-04' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794081014.3050168,
+      "timestamp_str": "2026-11-07 22:50:14",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-05",
+      "phase": "resumed",
+      "phase_num": 2,
+      "description": "Resumed 'iris-cycle-05' after a pause",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081014.9591904,
+      "timestamp_str": "2026-11-07 22:50:14",
+      "agent": "opencode:iris-cycle"
     }
   ]
 }
