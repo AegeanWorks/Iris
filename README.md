@@ -19,7 +19,7 @@ Iris is a zero-install browser puzzle about additive light. Each chamber gives y
 - **Help in play**: reopen the field guide from the game controls without losing your route; a board-symbol key and a labeled mixing key spell out every glyph and hue.
 - **Keyboard and touch parity**: click or tap a mirror, or move with the arrow keys and rotate with Enter or Space; Z, R and H undo, reset and hint.
 - **Versioned local progress**: stars, best moves and the sound preference live in `localStorage` under `iris.progress.v1`; a corrupt or future record resets instead of breaking, and only the twelve authored chambers count toward lit progress.
-- **Generated audio only**: rotation, charge, lost charge, hint and victory cues are synthesized with the Web Audio API; the repository ships no audio files and makes no network call.
+- **Generated audio only**: rotation, charge, lost charge, hint and victory cues are synthesized with the Web Audio API; the repository ships no audio files, makes no network call, and turning sound off stops cues already in flight.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
 
@@ -63,7 +63,7 @@ Mirrors turn through a short quarter-circle when rotated. The drawn slash always
 ## Verification
 
 ```bash
-node --test                       # 107 engine, level, progress, server, audio and UI contract tests
+node --test                       # 110 engine, level, progress, server, audio and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook

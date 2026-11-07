@@ -1,57 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-09",
+    "task_id": "iris-cycle-10",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794083545.398319,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794083928.020513,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794083602.7479596
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-05",
-      "phase": "resumed",
-      "phase_num": 2,
-      "description": "Resumed 'iris-cycle-05' after a pause",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081014.9591904,
-      "timestamp_str": "2026-11-07 22:50:14",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-05",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Added the two wall blocks to The Vault, the README wall row and the field-guide wall rule, with failing-first level and help tests and a four-move played run",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081233.458567,
-      "timestamp_str": "2026-11-07 22:53:53",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-05",
-      "phase": "verification",
-      "phase_num": 4,
-      "description": "[4/4] Verification complete; checklists: passed; 102/102 node tests, check-levels shows The Vault par 4 with a unique four-move route, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; same-state before/after board pair and a four-move victory run recorded",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081246.1931038,
-      "timestamp_str": "2026-11-07 22:54:06",
-      "agent": "opencode:iris-cycle",
-      "handoff": {
-        "state": "7 modified files ready for explicit staging",
-        "next": "commit cycle 5, then start cycle 6 on combat feel or the deferred win-dialog focus",
-        "failed": "none",
-        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
-        "evidence": ".aikit/improvement-record.md cycle 5, scratch/iris-evidence/cycle-05"
-      }
-    },
     {
       "task_id": "iris-cycle-05",
       "phase": "completed",
@@ -289,6 +248,53 @@
       "timestamp": 1794083602.7479627,
       "timestamp_str": "2026-11-07 23:33:22",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-10",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Audio pass 2: make the sound toggle stop already-scheduled voices immediately, proven by a mute-during-cue unit test and a browser stop-log run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794083670.3920374,
+      "timestamp_str": "2026-11-07 23:34:30",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "setMuted(true) only blocks future play() calls. A cue that is already scheduled keeps sounding, so toggling sound off during the win arpeggio or a hint ping does not silence it.",
+        "benefits": "The Sound on/off control takes effect immediately: every active oscillator is stopped and disconnected when muting, while unmuting leaves future cues untouched. No audio file or network change.",
+        "risks": "contract: generated audio only; dependency: none; concurrency: one Set of active voices per audio instance; state: no save change.",
+        "mitigation": "Track each oscillator/amplifier pair, remove it on ended, stop and disconnect all voices on mute, guard against double-stop, and test with the fake AudioContext plus a browser stop log."
+      },
+      "plan_digest": "721889bee7a7444fd9aa78f7211de83100ae6b660bbd2cbba50ed94d1ffd3dfb"
+    },
+    {
+      "task_id": "iris-cycle-10",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Added the active-voice Set and immediate stop/disconnect on mute, with failing-first fake-context tests and a browser stop log showing the extra immediate stop",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794083912.8271852,
+      "timestamp_str": "2026-11-07 23:38:32",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-10",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 110/110 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; fake-context mute tests and a browser stop log recorded",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794083928.020513,
+      "timestamp_str": "2026-11-07 23:38:48",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "5 modified files ready for explicit staging",
+        "next": "commit cycle 10, then review remaining findings for another verified cycle",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, emitter swatch arrow size",
+        "evidence": ".aikit/improvement-record.md cycle 10, scratch/iris-evidence/cycle-10"
+      }
     }
   ]
 }

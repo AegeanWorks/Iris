@@ -32,6 +32,7 @@ const CUES = Object.freeze({
 export function createAudio(scope = globalThis) {
   let context = null;
   let muted = false;
+  const voices = new Set();
 
   function ensureContext() {
     if (context) {
@@ -57,8 +58,38 @@ export function createAudio(scope = globalThis) {
     return Boolean(ctx);
   }
 
+  function stopVoice(voice) {
+    if (!voices.delete(voice)) {
+      return;
+    }
+    try {
+      voice.oscillator.stop();
+    } catch {
+      // The voice may already have stopped on its own schedule.
+    }
+    try {
+      voice.oscillator.disconnect();
+    } catch {
+      // A disconnected node is already silent.
+    }
+    try {
+      voice.amplifier.disconnect();
+    } catch {
+      // A disconnected node is already silent.
+    }
+  }
+
+  function stopVoices() {
+    for (const voice of [...voices]) {
+      stopVoice(voice);
+    }
+  }
+
   function setMuted(value) {
     muted = Boolean(value);
+    if (muted) {
+      stopVoices();
+    }
   }
 
   function isMuted() {
@@ -79,6 +110,11 @@ export function createAudio(scope = globalThis) {
     amplifier.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
     oscillator.connect(amplifier);
     amplifier.connect(ctx.destination);
+    const voice = { oscillator, amplifier };
+    voices.add(voice);
+    oscillator.onended = () => {
+      voices.delete(voice);
+    };
     oscillator.start(startAt);
     oscillator.stop(startAt + duration + 0.02);
   }

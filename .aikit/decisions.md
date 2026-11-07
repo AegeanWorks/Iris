@@ -116,3 +116,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: `resetLevel` called `openLevel`, which cleared the undo stack and the move count. Reset sits beside Undo, and one misclick wiped the route with no recovery even though every rotation was undoable.
 - **Decision**: Reset now pushes the current game and move count onto the undo stack, recreates the level from its frozen data, clears the hint and its timer, and re-renders without changing the open level or preview mode. A reset after a win (Replay) clears the stack instead, and the existing 80-step cap still applies.
 - **Consequences**: Reset is reversible during play; Undo is enabled immediately after a reset and restores the pre-reset board. No save, level or dependency change. 107/107 tests, a reset-state pair showing Undo enabled and a rotate-reset-undo run are green.
+
+### ADR-016: Stop active voices when the sound toggle is muted
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: `setMuted(true)` only blocked future `play()` calls. A win arpeggio or hint ping that was already scheduled kept sounding, so the Sound off button did not silence the game immediately.
+- **Decision**: Track each scheduled oscillator/amplifier pair in a per-instance Set, remove it on `ended`, and on mute call `stop()` and `disconnect()` on every remaining voice. Clear the Set as each voice is stopped so a second mute cannot touch it again. Unmuting only affects future cues.
+- **Consequences**: Sound off takes effect on the current cue; no audio file, network or save change. The fake-context tests cover immediate stop, double mute and unmute, and a browser stop log shows one scheduled stop plus one immediate stop on the same voice. 110/110 tests are green.

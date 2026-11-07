@@ -25,15 +25,23 @@ class FakeOscillator {
     this.log = log;
     this.type = "sine";
     this.frequency = new FakeParam(log, "frequency");
+    this.stopCalls = 0;
+    this.disconnectCalls = 0;
+    this.onended = null;
   }
 
   connect() {}
+
+  disconnect() {
+    this.disconnectCalls += 1;
+  }
 
   start(time) {
     this.log.push({ kind: "start", time });
   }
 
   stop(time) {
+    this.stopCalls += 1;
     this.log.push({ kind: "stop", time });
   }
 }
@@ -41,21 +49,29 @@ class FakeOscillator {
 class FakeGain {
   constructor(log) {
     this.gain = new FakeParam(log, "gain");
+    this.disconnectCalls = 0;
   }
 
   connect() {}
+
+  disconnect() {
+    this.disconnectCalls += 1;
+  }
 }
 
 class FakeContext {
-  constructor(log, state) {
+  constructor(log, state, oscillators = []) {
     this.log = log;
     this.state = state;
     this.currentTime = 1;
     this.destination = {};
+    this.oscillators = oscillators;
   }
 
   createOscillator() {
-    return new FakeOscillator(this.log);
+    const oscillator = new FakeOscillator(this.log);
+    this.oscillators.push(oscillator);
+    return oscillator;
   }
 
   createGain() {
@@ -71,13 +87,14 @@ class FakeContext {
 
 function setup(state = "running") {
   const log = [];
+  const oscillators = [];
   class Context extends FakeContext {
     constructor() {
-      super(log, state);
+      super(log, state, oscillators);
     }
   }
   const audio = createAudio({ AudioContext: Context });
-  return { audio, log };
+  return { audio, log, oscillators };
 }
 
 function frequencies(log) {
@@ -120,6 +137,35 @@ test("a muted audio module schedules nothing", () => {
   assert.equal(audio.isMuted(), true);
   assert.equal(audio.play("win"), false);
   assert.deepEqual(log, []);
+});
+
+test("muting stops voices that are already scheduled", () => {
+  const { audio, oscillators } = setup();
+  assert.equal(audio.play("win"), true);
+  assert.equal(oscillators.length, 4);
+  assert.equal(oscillators.every((oscillator) => oscillator.stopCalls === 1), true);
+  audio.setMuted(true);
+  assert.equal(oscillators.every((oscillator) => oscillator.stopCalls === 2), true);
+  assert.equal(oscillators.every((oscillator) => oscillator.disconnectCalls === 1), true);
+});
+
+test("muting twice does not stop a voice twice", () => {
+  const { audio, oscillators } = setup();
+  audio.play("rotate");
+  audio.setMuted(true);
+  audio.setMuted(true);
+  assert.equal(oscillators.length, 1);
+  assert.equal(oscillators[0].stopCalls, 2);
+});
+
+test("unmuting allows the next cue to play", () => {
+  const { audio, oscillators } = setup();
+  audio.setMuted(true);
+  assert.equal(audio.play("rotate"), false);
+  assert.equal(oscillators.length, 0);
+  audio.setMuted(false);
+  assert.equal(audio.play("rotate"), true);
+  assert.equal(oscillators.length, 1);
 });
 
 test("an unknown cue schedules nothing", () => {

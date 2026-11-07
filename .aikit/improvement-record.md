@@ -250,3 +250,29 @@ Dead ends: none; the existing 80-step stack and hint cleanup already cover the e
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** Turning sound off still does not stop already-scheduled oscillators. The field guide's emitter swatch arrow is small at normal size.
+
+## Cycle 10 — 2026-11-07 — Audio, pass 2: mute silences the current cue
+
+**Find.** `setMuted(true)` only blocked future `play()` calls. A win arpeggio or hint ping that was already scheduled kept sounding, so the Sound off button did not silence the game immediately. The new fake-context tests failed with `stopCalls 1 !== 2` before the change.
+
+**Analyze.** Survivors:
+1. Track each scheduled oscillator/amplifier pair in the audio instance.
+2. On mute, stop and disconnect every remaining voice and clear it from the set.
+3. Remove each voice on `ended` so normal cues do not accumulate, and keep unmute limited to future cues.
+Dead ends: none; the cue table and generated-audio promise stay unchanged.
+
+**Implement.** `src/ui/audio.js` now holds a `voices` Set, stores `{ oscillator, amplifier }` per tone, removes it on `ended`, and `setMuted(true)` calls a guarded `stopVoice()` for every remaining entry. `tests/audio.test.js` adds immediate-stop, double-mute and unmute tests with the fake context. The evidence recorder logs `stop()` calls with their `when` argument.
+
+**Proof.**
+- Unit: playing `win` creates four voices with one scheduled stop each; muting adds a second stop and one disconnect per voice; a second mute adds nothing; unmuting allows the next cue.
+- Browser stop log (`scratch/iris-evidence/cycle-10`): a synchronous rotate click followed by the sound toggle recorded `[{"type":"sine","when":0.07},{"type":"sine","when":null}]` — the scheduled stop and the immediate mute stop on the same voice — with `aria-pressed="false"` and `sound:false` stored.
+- Failing-first: the two new tests failed with `stopCalls 1 !== 2` and the missing disconnect before the Set existed.
+
+**Gates.**
+- `node --test` → 110 pass, 0 fail (was 107).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including the sound preference check, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** The field guide's emitter swatch arrow is small at normal size. The sound toggle only exists on the title and game screens, which is sufficient; no further audio gap was reproduced.
