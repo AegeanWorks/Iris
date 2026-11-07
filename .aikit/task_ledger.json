@@ -3,25 +3,15 @@
   "active_task": {
     "task_id": "iris-wave-1-18",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794086284.526195,
     "owner": "opencode:iris-wave",
     "started_by": "opencode:iris-wave",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794086311.1283228
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-09",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Made reset push the pre-reset board, recreated the level in place, cleared hints and preserved preview, with a failing-first reset/undo browser run and same-scroll before/after pairs",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794083530.2316594,
-      "timestamp_str": "2026-11-07 23:32:10",
-      "agent": "opencode:iris-cycle"
-    },
     {
       "task_id": "iris-cycle-09",
       "phase": "verification",
@@ -302,6 +292,16 @@
         "open": "pre-existing UI delivery warning",
         "evidence": ".aikit/improvement-record.md wave 1->18"
       }
+    },
+    {
+      "task_id": "iris-wave-1-18",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-wave-1-18' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794086311.1283247,
+      "timestamp_str": "2026-11-08 00:18:31",
+      "agent": "opencode:iris-wave"
     }
   ]
 }
