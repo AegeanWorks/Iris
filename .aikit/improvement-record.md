@@ -196,3 +196,30 @@ Dead ends: focusing the win heading to fix a scroll that does not occur; dropped
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** The field guide still has no symbol key for emitters, mirrors, dyes and receivers; the legend covers mixing but not the board glyphs. Turning sound off still does not stop already-scheduled tones.
+
+## Cycle 8 — 2026-11-07 — UI readability, pass 3: board symbol key
+
+**Find.** The field guide named emitters, mirrors, dye cells and receivers in prose but never showed the four glyphs the player sees. At `?screen=title&preview=howto` the guide had a mixing key but no symbol key; a first-time player had to infer circle-arrow, slanted line, ringed circle and double ring from the board. The README table explained them; the in-game guide did not.
+
+**Analyze.** Survivors:
+1. Add a four-row `Board symbols` key with CSS swatches drawn from the same beam tokens as the board.
+2. Label each row with its name and rule, keeping the swatches `aria-hidden` so the text carries the meaning.
+3. Collapse the key to one column on mobile and check both 1440 and 390 for horizontal overflow.
+Dead ends: none; the four glyphs are exactly the board's four special tiles.
+
+**Implement.** `index.html` adds `#help-dialog .symbol-key` with emitter, mirror, dye and receiver rows. `src/styles.css` draws the swatches with the existing `--beam-r`, `--iris`, `--beam-g`, `--beam-w` and `--beam-c` tokens and lays them out in a two-column grid that collapses to one. The dogfood now counts four symbol rows, checks all four labels and includes them in both the desktop and 320px overflow checks. Failing-first: the new UI test reported `0 !== 4` before the markup.
+
+**Proof.**
+- 1440x900 pair, same `?screen=title&preview=howto` state: `cycle-08/pair-help-1440.png`. Before: prose and mixing key only; after: the 2x2 `BOARD SYMBOLS` key above the mixing key, with all four glyphs.
+- 390x844 pair, same state: `cycle-08/pair-help-390.png`. Before: no symbol key, dialog 787px tall with no internal scroll; after: four symbol rows in one column, dialog capped at 806px and scrolls, opening at the heading as before.
+- Browser measurements after: four `.symbol-line` rows, labels Emitter/Mirror/Dye/Receiver present, no horizontal overflow at 1440 or 320 (the 320 check now includes `.symbol-line`).
+- The dogfood still opens the guide at its heading, closes it and returns to the board in the same run.
+
+**Gates.**
+- `node --test` → 106 pass, 0 fail (was 105).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including board-symbol and mixing keys, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** Turning sound off still does not stop already-scheduled oscillators. The emitter swatch's arrow is small at normal size; a future polish pass could thicken it if play notes show it is missed.

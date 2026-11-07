@@ -102,3 +102,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The fourth chamber of each episode and the twelfth chamber ended a chapter, but their victory dialogs said `Chamber 04 complete` and `Chamber 12 complete`, identical to an ordinary chamber. The player got no signal that Episode II was unlocked or that the campaign was over.
 - **Decision**: Add `isEpisodeFinal(level)` and `nextEpisodeForLevel(level)` to the level model. The victory kicker becomes `Episode <numeral> complete` for an episode finale and `Campaign complete` for the last chamber; a new `#win-episode` callout says `Episode <next> — <name> awaits.` or `All three episodes complete. The spectrum is yours.` Ordinary chambers keep the old kicker and hide the callout.
 - **Consequences**: No save, level, dependency or input change. Preview victories still show the same copy, but no unlock is recorded. 105/105 tests are green; a played run through The Vault shows the Episode I close and Next opens Yellow Room in Episode II.
+
+### ADR-014: Add a board-symbol key to the field guide
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The field guide named emitters, mirrors, dye cells and receivers in prose but never showed the four glyphs the player sees. The README table explained them, but a first-time player had to infer the board symbols while playing.
+- **Decision**: Add a `Board symbols` key above the mixing key with four CSS swatches drawn from the same beam tokens: a red emitter with its arrow, a slash mirror, a green dye ring and a white receiver ring with a cyan dot. Each row names the glyph and its rule. The swatches are decorative (`aria-hidden`), while the label text carries the meaning.
+- **Consequences**: No runtime, save, level or dependency change. The help dialog is taller and scrolls at 390px, but it still opens at its heading; the 2x2 key collapses to one column on mobile. 106/106 tests and the browser dogfood are green.

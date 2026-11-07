@@ -127,6 +127,16 @@ test("the field guide explains color mixing in words", () => {
   }
 });
 
+test("the field guide shows a board symbol key", () => {
+  const start = html.indexOf('id="help-dialog"');
+  const end = html.indexOf("</dialog>", start);
+  const help = html.slice(start, end);
+  assert.equal((help.match(/class="symbol-line"/g) ?? []).length, 4);
+  for (const label of ["Emitter", "Mirror", "Dye", "Receiver"]) {
+    assert.match(help, new RegExp(`>${label}<`), `missing the ${label} symbol`);
+  }
+});
+
 test("the field guide explains that walls stop light", () => {
   const start = html.indexOf('id="help-dialog"');
   const end = html.indexOf("</dialog>", start);

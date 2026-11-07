@@ -1,64 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-07",
+    "task_id": "iris-cycle-08",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794082297.3536954,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794082814.4033787,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794082340.5185795
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-04",
-      "phase": "planning",
-      "phase_num": 2,
-      "description": "[1/4] Progression and saves: count title and chamber progress only for real campaign chambers, so a forged or stale save with ghost ids cannot inflate lit chambers or stars, proven by a forged-save screenshot pair and a reload run",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794080173.5566533,
-      "timestamp_str": "2026-11-07 22:36:13",
-      "agent": "opencode:iris-cycle",
-      "impact_assessment": {
-        "why": "normalizeProgress keeps any non-empty level id, and solvedCount/starCount count every stored key. A save containing ghost ids shows lit chambers and stars for chambers that do not exist, while the chamber grid shows none, so the title and index disagree.",
-        "benefits": "The title, rank and chamber index summarize only the 12 authored chambers; older or hand-edited saves keep their real entries and ignore invented ones; the fix is a two-function signature change with no storage-format change.",
-        "risks": "contract: progress keys stay under iris.progress.v1; dependency: none; concurrency: none; state: read-only filtering, no record rewrite.",
-        "mitigation": "Add failing progress tests for a ghost entry and a missing campaign list, pass LEVELS from the two app call sites, and verify the title and chambers screen from the same forged localStorage record before and after."
-      },
-      "plan_digest": "6aacd7961f2ce4796f2eb13326ac9d99f6ecbce55e629aa06da54bbf3bd33b4d"
-    },
-    {
-      "task_id": "iris-cycle-04",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Filtered solvedCount and starCount to authored campaign ids, required the level list at both call sites, added ghost-save failing-first tests, and captured forged-save before/after title and chamber pairs plus a ghost-save play run",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794080733.6767998,
-      "timestamp_str": "2026-11-07 22:45:33",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-04",
-      "phase": "verification",
-      "phase_num": 4,
-      "description": "[4/4] Verification complete; checklists: passed; 100/100 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; forged-save pairs show title 2-of-12 to 12-chambers and chambers 2-of-12 to 0-of-12, and the ghost-save play run reports 1 of 12 after a real solve",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794080744.8919563,
-      "timestamp_str": "2026-11-07 22:45:44",
-      "agent": "opencode:iris-cycle",
-      "handoff": {
-        "state": "6 modified files ready for explicit staging",
-        "next": "commit cycle 4, then start cycle 5 on levels or the next progression opportunity",
-        "failed": "none",
-        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
-        "evidence": ".aikit/improvement-record.md cycle 4, scratch/iris-evidence/cycle-04"
-      }
-    },
     {
       "task_id": "iris-cycle-05",
       "phase": "planning",
@@ -281,6 +233,53 @@
       "timestamp": 1794082340.5185814,
       "timestamp_str": "2026-11-07 23:12:20",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-08",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] UI readability pass 3: add a four-glyph board symbol key to the field guide, with a before/after help pair at 1440 and 390 and a browser overflow check",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082404.1548336,
+      "timestamp_str": "2026-11-07 23:13:24",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "The field guide names emitters, mirrors, dye cells and receivers in prose but never shows the glyphs the player sees on the board. The README table explains them; the in-game guide does not, so a first-time player has to infer four symbols from the board.",
+        "benefits": "The guide maps circle-arrow, slanted line, ringed circle and double ring to their names and rules in one glance, using the same beam tokens as the board; no runtime or save change.",
+        "risks": "contract: PLAYABLE.md static assets only; dependency: none; concurrency: none; state: help copy only.",
+        "mitigation": "Use CSS-only swatches with existing beam tokens, add failing-first tests for four labeled symbol rows, check both 1440 and 390 widths for horizontal overflow, and keep the guide opening at its heading."
+      },
+      "plan_digest": "4f7471a78153a71513639d4f1ec1ac93d14b58f3dbe2d0eff29fd1542a64fddb"
+    },
+    {
+      "task_id": "iris-cycle-08",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Added the four-glyph board symbol key, its responsive grid and the browser symbol/overflow checks, with a failing-first UI test and 1440/390 pairs",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082795.1384315,
+      "timestamp_str": "2026-11-07 23:19:55",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-08",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 106/106 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with board-symbol and mixing keys, aikit 5/5 gates; 1440 and 390 help pairs plus 320 overflow measurements recorded",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082814.4033787,
+      "timestamp_str": "2026-11-07 23:20:14",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "7 modified files ready for explicit staging",
+        "next": "commit cycle 8, then consider sound-off cancellation or another verified finding",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, scheduled tones survive mute",
+        "evidence": ".aikit/improvement-record.md cycle 8, scratch/iris-evidence/cycle-08"
+      }
     }
   ]
 }

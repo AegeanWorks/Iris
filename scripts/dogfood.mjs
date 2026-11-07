@@ -498,12 +498,15 @@ async function main() {
       const key = document.querySelector('#help-dialog .mix-key');
       const dialog = document.getElementById('help-dialog').getBoundingClientRect();
       const lines = key ? [...key.querySelectorAll('.mix-line')] : [];
+      const symbols = [...document.querySelectorAll('#help-dialog .symbol-line')];
       return {
         open: document.getElementById('help-dialog').open,
         label: document.getElementById('btn-help-close').textContent,
         equations: lines.length,
+        symbols: symbols.length,
+        symbolText: symbols.map((line) => line.textContent).join(' '),
         text: key ? key.textContent.replace(/\\s+/g, ' ').trim() : '',
-        overflow: lines.some((line) => {
+        overflow: lines.concat(symbols).some((line) => {
           const rect = line.getBoundingClientRect();
           return rect.left < dialog.left || rect.right > dialog.right;
         })
@@ -515,8 +518,12 @@ async function main() {
     if (help.equations !== 4 || !help.text.includes("magenta") || !help.text.includes("white")) {
       throw new Error(`The field guide does not label the mixing equations: ${JSON.stringify(help)}.`);
     }
+    if (help.symbols !== 4 ||
+        !["Emitter", "Mirror", "Dye", "Receiver"].every((label) => help.symbolText.includes(label))) {
+      throw new Error(`The field guide does not label the board symbols: ${JSON.stringify(help)}.`);
+    }
     if (help.overflow) {
-      throw new Error(`A field-guide mixing equation overflows the dialog: ${JSON.stringify(help)}.`);
+      throw new Error(`A field-guide key overflows the dialog: ${JSON.stringify(help)}.`);
     }
     await clickSelector(connection, "#btn-help-close");
     const helpClosed = await connection.evaluate(
@@ -656,7 +663,7 @@ async function main() {
         scrollTop: dialog.scrollTop,
         headingTop: heading.top,
         dialogTop: bounds.top,
-        overflow: [...dialog.querySelectorAll('.mix-line')].some((line) => {
+        overflow: [...dialog.querySelectorAll('.mix-line, .symbol-line')].some((line) => {
           const rect = line.getBoundingClientRect();
           return rect.left < bounds.left || rect.right > bounds.right;
         })
@@ -703,7 +710,7 @@ async function main() {
         !campaignWin.text.includes("All three episodes complete")) {
       throw new Error(`The campaign finale was not marked: ${JSON.stringify(campaignWin)}.`);
     }
-    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, Z/R/H shortcuts, hint, hint/charge/uncharge/win audio, in-game help, labeled mixing key, episode/campaign finales, preview and responsive board.");
+    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, Z/R/H shortcuts, hint, hint/charge/uncharge/win audio, in-game help, board-symbol and mixing keys, episode/campaign finales, preview and responsive board.");
     return 0;
   } catch (error) {
     console.error(`[FAIL] Iris dogfood: ${error.message}`);
