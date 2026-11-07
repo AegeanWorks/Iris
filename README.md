@@ -13,7 +13,7 @@ A neon color-mixing puzzle: route red, green and blue beams through rotating mir
 Iris is a zero-install browser puzzle about additive light. Each chamber gives you emitters, mirrors and dyes; every receiver wants one exact hue, and a beam that arrives too rich or too poor does not count. Rotate the mirrors, bend the light, and charge all receivers to finish the chamber.
 
 - **Three episodes, twelve chambers**: primary routing, secondary mixing, then full-spectrum routes with white light; the fourth chamber closes each episode and the twelfth ends the campaign.
-- **Forgiving controls**: undo restores the last rotation, and a reset goes on the undo stack too, so a misclick never costs the route.
+- **Forgiving controls**: undo restores the last rotation, and a reset goes on the undo stack too, so a misclick never costs the route; the status line says so after a reset.
 - **Par and stars**: finish at or under par for three stars, within two extra moves for two.
 - **Hints that cost nothing but time**: a dashed mirror shows one correct orientation for five seconds; the move still has to be made.
 - **Help in play**: reopen the field guide from the game controls without losing your route; a board-symbol key and a labeled mixing key spell out every glyph and hue, and the action stays pinned within reach on small screens.
@@ -63,7 +63,7 @@ Mirrors turn through a short quarter-circle when rotated. The drawn slash always
 ## Verification
 
 ```bash
-node --test                       # 113 engine, level, progress, server, audio and UI contract tests
+node --test                       # 114 engine, level, progress, server, audio and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook

@@ -400,6 +400,12 @@ async function main() {
     if (resetState.moves !== "0" || resetState.orientation !== "/" || resetState.undoDisabled) {
       throw new Error(`Reset did not leave an undoable baseline: ${JSON.stringify(resetState)}.`);
     }
+    const resetStatus = await connection.evaluate(
+      "document.getElementById('status').textContent",
+    );
+    if (!resetStatus.includes("Undo restores")) {
+      throw new Error(`Reset did not explain that it is undoable: ${JSON.stringify(resetStatus)}.`);
+    }
     await clickSelector(connection, "#btn-undo");
     const restored = await connection.evaluate(`(() => ({
       moves: document.getElementById('move-count').textContent,

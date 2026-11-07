@@ -146,6 +146,10 @@ test("the symbol key explains the receiver ring and dot", () => {
   assert.match(styles, /\.symbol-arrow \{[\s\S]*?border-width: 5px 0 5px 9px/);
 });
 
+test("reset explains that it is undoable", () => {
+  assert.match(app, /Chamber reset\. Undo restores your route\./);
+});
+
 test("the help dialog keeps its actions visible on short screens", () => {
   assert.match(styles, /#help-dialog \.panel-foot \{[\s\S]*?position: sticky/);
 });

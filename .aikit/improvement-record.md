@@ -361,3 +361,14 @@ Fix: `#help-dialog .panel-foot` is now `position: sticky; bottom: 0` with a top 
 - Measurements after: `footVisible true`, `position sticky`, dialog 806px tall with `scrollHeight 1039`.
 - The browser dogfood now asserts `footVisible` in its 320px narrow-help check; it failed before the CSS and passes after.
 - Gates: 113/113 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5. Pushed in the 1→15 wave.
+
+## Verification wave 1→18 — reset recovery was silent
+
+Range `bfc09a4..393f910` (adds the undoable reset and its task). Re-reading the reset path found a discoverability gap: after a reset the Undo button became enabled, but the status line still said `0 of 1 receivers charged ...`; nothing told the player that the reset was reversible.
+
+Fix: `resetLevel` captures whether the reset is undoable (not a Replay after a win, and moves were on the clock), then sets the status to `Chamber reset. Undo restores your route.` after the render. Resets at zero moves and Replay after a win keep the normal progress text.
+
+- Pair, same Double Bend reset state and 1440x900 viewport: `wave-1-18/pair-reset-status-1440.png`; zoom `pair-zoom-reset-status.png`. Before: progress text. After: the recovery message.
+- Played run: rotate → reset (`0` moves, `/`, Undo enabled, recovery message) → Undo (`1` move, `\`, progress text). The dogfood now asserts the recovery message; it failed before the copy was added.
+- Failing-first: the browser check reported the old progress text instead of `Undo restores`.
+- Gates: 114/114 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5. Pushed in the 1→18 wave.

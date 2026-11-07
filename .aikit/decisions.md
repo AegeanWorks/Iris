@@ -144,3 +144,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The field guide grew to prose, six rules, four symbol rows and four mixing rows. At 390x844 the dialog is 806px tall with 1039px of content, so the Begin button sat at y=972 and was not visible when the guide opened at its heading. Closing required scrolling to the bottom or tapping outside.
 - **Decision**: Make `#help-dialog .panel-foot` sticky to the bottom of the dialog scrollport with a top border, matching background and bottom corner radius. The guide still opens at its heading and the content still scrolls; the action is simply always reachable.
 - **Consequences**: Static CSS only; no runtime, save or level change. The win dialog is untouched because the rule is scoped to the help dialog. 113/113 tests and the browser narrow-screen check are green.
+
+### ADR-020: Announce that a reset is undoable
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: Reset became reversible in ADR-015, but the only in-game signal was an enabled Undo button; the status line continued to describe the receivers. A player who reset by accident had to infer that Undo could restore the route.
+- **Decision**: When a reset actually pushes an undoable board (during play, with moves on the clock), replace the status line with `Chamber reset. Undo restores your route.` after the board renders. Resets at zero moves and Replay after a win keep the normal progress text because they have no undoable state.
+- **Consequences**: The `role="status"` live region announces the recovery path. No save, level or dependency change. 114/114 tests, the reset-status pair and the browser reset/undo run are green.

@@ -653,9 +653,10 @@ function resetLevel() {
   }
   audio.stop();
   const wasWon = state.won;
+  const undoable = !wasWon && state.moves > 0;
   if (wasWon) {
     state.undoStack = [];
-  } else if (state.moves > 0) {
+  } else if (undoable) {
     state.undoStack.push({ game: state.game, moves: state.moves });
     if (state.undoStack.length > 80) {
       state.undoStack.shift();
@@ -668,6 +669,9 @@ function resetLevel() {
   state.won = false;
   clearHintTimer();
   renderGame();
+  if (undoable) {
+    refs.status.textContent = "Chamber reset. Undo restores your route.";
+  }
 }
 
 function showHint() {
