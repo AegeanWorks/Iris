@@ -372,3 +372,9 @@ Fix: `resetLevel` captures whether the reset is undoable (not a Replay after a w
 - Played run: rotate → reset (`0` moves, `/`, Undo enabled, recovery message) → Undo (`1` move, `\`, progress text). The dogfood now asserts the recovery message; it failed before the copy was added.
 - Failing-first: the browser check reported the old progress text instead of `Undo restores`.
 - Gates: 114/114 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5. Pushed in the 1→18 wave.
+
+## Verification wave 1→21 — clean
+
+Range `bfc09a4..c15ab40` (mute cancellation and the receiver glyph key). Re-ran the mute-during-cue browser log: one scheduled stop at `0.07` plus one immediate `when: null` stop on the same voice, `aria-pressed false` and `sound:false` stored. The receiver key still has four rows, the ring/dot copy and no horizontal overflow at 1440 or 320.
+
+No new bug, gap or improvement candidate survived. Gates stayed green at 114/114 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5. Push is a no-op after the 1→18 wave.
