@@ -344,3 +344,9 @@ Range `bfc09a4..e83238e` (adds The Vault walls, Z/R/H shortcuts, episode finales
 - Field guide: 4 symbol rows, 4 mixing rows, no horizontal overflow, `scrollTop 0` and the heading visible.
 
 No new bug, gap or improvement candidate survived. Gates stayed green at 112/112 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5. Push is a no-op after the 1→6 wave.
+
+## Verification wave 1→12 — clean
+
+Range `bfc09a4..58de15c` (adds the Z/R/H shortcut wiring and its ledger). Re-checked the guard path in a real browser: after one rotation, opening the field guide and pressing `Z`, `R` and `H` left the moves at 1, the mirror at `\`, no hint ghost and the dialog open; closing the guide and pressing `Z` then returned the board to 0 moves and `/`.
+
+No new bug, gap or improvement candidate survived. Gates stayed green at 112/112 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5. Push is a no-op after the 1→6 wave.
