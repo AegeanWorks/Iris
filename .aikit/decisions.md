@@ -130,3 +130,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The symbol key said a receiver `wants one exact hue`, but the board draws the target as the ring and the arriving color as the center dot. That convention is the one part of the receiver glyph the key did not explain, and the emitter swatch arrow was hard to see at normal size.
 - **Decision**: Change the receiver row to `ring wants one exact hue; dot shows what arrives` and widen the emitter swatch arrow from 4x7 to 5x9 so it reads without zooming. The board glyphs and colors stay unchanged.
 - **Consequences**: Static help copy and CSS only; no runtime, save, level or dependency change. The key is still four rows and remains inside the dialog at 1440 and 390. 111/111 tests and the browser dogfood are green.
+
+### ADR-018: Stop active cues when leaving the board or a level
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The victory fanfare is scheduled for about half a second. Clicking Chambers or Next during it left every scheduled voice active while the title, chamber index or next level was already on screen. `setMuted` stopped voices, but screen transitions had no stop path.
+- **Decision**: Expose `audio.stop()` and call it from `showTitle`, `showChambers`, `openLevel` and `resetLevel`. The win dialog and the board keep their fanfare; any deliberate screen or level change silences the current cue.
+- **Consequences**: Leaving the board stops the cue immediately, including the win arpeggio. No audio file, network, save or level change. A browser run shows seven scheduled stops plus seven immediate stops on the same win transition, and 112/112 tests are green.

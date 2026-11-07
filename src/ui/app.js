@@ -280,12 +280,14 @@ function renderChambers() {
 
 function showTitle() {
   clearHintTimer();
+  audio.stop();
   renderTitleProgress();
   setScreen("title");
 }
 
 function showChambers({ focus = true } = {}) {
   clearHintTimer();
+  audio.stop();
   renderChambers();
   setScreen("chambers", { focus });
 }
@@ -295,6 +297,7 @@ function openLevel(levelId, { preview = false } = {}) {
   if (!level) {
     return;
   }
+  audio.stop();
   state.level = level;
   state.game = createGame(level);
   state.moves = 0;
@@ -648,6 +651,7 @@ function resetLevel() {
   if (!state.level) {
     return;
   }
+  audio.stop();
   const wasWon = state.won;
   if (wasWon) {
     state.undoStack = [];

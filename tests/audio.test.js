@@ -168,6 +168,14 @@ test("unmuting allows the next cue to play", () => {
   assert.equal(oscillators.length, 1);
 });
 
+test("stop silences every active voice", () => {
+  const { audio, oscillators } = setup();
+  audio.play("win");
+  audio.stop();
+  assert.equal(oscillators.every((oscillator) => oscillator.stopCalls === 2), true);
+  assert.equal(oscillators.every((oscillator) => oscillator.disconnectCalls === 1), true);
+});
+
 test("an unknown cue schedules nothing", () => {
   const { audio, log } = setup();
   assert.equal(audio.play("missing"), false);

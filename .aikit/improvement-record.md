@@ -321,3 +321,16 @@ Dead ends: none; the board glyphs and colors are already the intended ones.
 **No code changes.** Final scripted campaign replay: 12/12 chambers lit, 36/36 stars, every victory saved (`scratch/iris-evidence/final-campaign/`). Full gates re-run green: `node --test` 111/111, `node scripts/check-levels.mjs` 12/12, `node scripts/ui-inventory.mjs` 19 entries, `node scripts/dogfood.mjs` OK, `python aikit.py check iris` 5/5.
 
 **Stop.** This find pass produced zero verified improvements with screenshot or played-run proof, so the improvement loop stops here pending new direction.
+
+## Verification wave 1→3 — clean
+
+Range `bfc09a4..e6a9510` (field-guide readability, ledger, mirror glyph/animation). Re-read the diffs, ran the full gates and the browser dogfood. No new bug, gap or improvement candidate survived: 111/111 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5. Pushed with the first wave.
+
+## Verification wave 1→6 — active cue leaked across a screen exit
+
+Range `bfc09a4..dc700c7` (adds audio cues and authored-chamber progress). Re-reading the audio lifecycle found a real gap: the win fanfare is scheduled for about half a second, and clicking Chambers during it left all seven voices scheduled while the chamber index was already on screen.
+
+- Reproducer before the fix: a synchronous First Light solve plus `Chambers` click produced `stops: [7 scheduled entries]`, `screen: "chambers"`, with no immediate stops.
+- Fix: `audio.stop()` now exposes the existing voice-set teardown, and `showTitle`, `showChambers`, `openLevel` and `resetLevel` call it. The win dialog itself still plays its fanfare.
+- Proof after the fix: the same browser run produced the seven scheduled stops plus seven `when: null` immediate stops, and the fake-context `stop silences every active voice` test passes.
+- Gates: 112/112 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5. Pushed in the 1→6 wave.

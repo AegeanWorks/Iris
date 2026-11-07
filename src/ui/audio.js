@@ -142,5 +142,5 @@ export function createAudio(scope = globalThis) {
     return true;
   }
 
-  return { unlock, setMuted, isMuted, play };
+  return { unlock, setMuted, isMuted, stop: stopVoices, play };
 }
