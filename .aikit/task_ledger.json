@@ -3,32 +3,15 @@
   "active_task": {
     "task_id": "iris-cycle-02",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794079331.8725886,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794079367.8234277
   },
   "checkpoints": [
-    {
-      "task_id": "iris-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Verification complete; checklists: passed; 67/67 tests, mechanics gate, browser dogfood, 40 interaction checks and the AegeanWorks static-contract validator all pass",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793307986.2919502,
-      "timestamp_str": "2026-10-30 00:06:26",
-      "agent": "kilo:iris",
-      "handoff": {
-        "state": "6 modified and 11 untracked files, .aikit/ui.json must be committed before ui begin/verify/finish",
-        "next": "review the uncommitted diff, commit and publish Iris, then add the Play-catalog entry and run the website sync",
-        "failed": "none",
-        "open": "no commit or push because the host forbids commits not explicitly requested",
-        "evidence": "node --test tests 67 pass, dogfood OK, interaction flow OK, AegeanWorks validate_source OK, media blockers none"
-      }
-    },
     {
       "task_id": "iris-v1",
       "phase": "phase 4",
@@ -313,6 +296,16 @@
         "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus and arrow-key scroll deferred",
         "evidence": ".aikit/improvement-record.md cycle 2, scratch/iris-evidence/cycle-02"
       }
+    },
+    {
+      "task_id": "iris-cycle-02",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-cycle-02' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794079367.8234296,
+      "timestamp_str": "2026-11-07 22:22:47",
+      "agent": "opencode:iris-cycle"
     }
   ]
 }
