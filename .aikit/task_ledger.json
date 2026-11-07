@@ -3,24 +3,15 @@
   "active_task": {
     "task_id": "iris-cycle-07",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794082297.3536954,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794082340.5185795
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-03",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-cycle-03' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794080099.878419,
-      "timestamp_str": "2026-11-07 22:34:59",
-      "agent": "opencode:iris-cycle"
-    },
     {
       "task_id": "iris-cycle-04",
       "phase": "planning",
@@ -280,6 +271,16 @@
         "open": "pre-existing UI contract delivery warning, sound-off does not stop scheduled tones",
         "evidence": ".aikit/improvement-record.md cycle 7, scratch/iris-evidence/cycle-07"
       }
+    },
+    {
+      "task_id": "iris-cycle-07",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-cycle-07' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794082340.5185814,
+      "timestamp_str": "2026-11-07 23:12:20",
+      "agent": "opencode:iris-cycle"
     }
   ]
 }
