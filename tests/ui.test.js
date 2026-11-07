@@ -146,6 +146,10 @@ test("the symbol key explains the receiver ring and dot", () => {
   assert.match(styles, /\.symbol-arrow \{[\s\S]*?border-width: 5px 0 5px 9px/);
 });
 
+test("the help dialog keeps its actions visible on short screens", () => {
+  assert.match(styles, /#help-dialog \.panel-foot \{[\s\S]*?position: sticky/);
+});
+
 test("the field guide explains that walls stop light", () => {
   const start = html.indexOf('id="help-dialog"');
   const end = html.indexOf("</dialog>", start);

@@ -350,3 +350,14 @@ No new bug, gap or improvement candidate survived. Gates stayed green at 112/112
 Range `bfc09a4..58de15c` (adds the Z/R/H shortcut wiring and its ledger). Re-checked the guard path in a real browser: after one rotation, opening the field guide and pressing `Z`, `R` and `H` left the moves at 1, the mirror at `\`, no hint ghost and the dialog open; closing the guide and pressing `Z` then returned the board to 0 moves and `/`.
 
 No new bug, gap or improvement candidate survived. Gates stayed green at 112/112 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5. Push is a no-op after the 1→6 wave.
+
+## Verification wave 1→15 — help actions fell below the fold
+
+Range `bfc09a4..161998d` (adds episode finales and the board-symbol key). At 390x844 the field guide is 806px tall with 1039px of content. Measured before the fix: `foot.top 971.9`, dialog bottom `825`, `footVisible false`, `position static` — the Begin button was off-screen when the guide opened at its heading.
+
+Fix: `#help-dialog .panel-foot` is now `position: sticky; bottom: 0` with a top border, matching background and bottom corner radius. The guide still opens at the heading and the content still scrolls; only the action is pinned.
+
+- Pair, same `?screen=title&preview=howto` state and 390x844 viewport: `wave-1-15/pair-help-footer-390.png`. Before: content cut at the bottom, no Begin button. After: Begin pinned at y=737–824.
+- Measurements after: `footVisible true`, `position sticky`, dialog 806px tall with `scrollHeight 1039`.
+- The browser dogfood now asserts `footVisible` in its 320px narrow-help check; it failed before the CSS and passes after.
+- Gates: 113/113 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5. Pushed in the 1→15 wave.

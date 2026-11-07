@@ -16,7 +16,7 @@ Iris is a zero-install browser puzzle about additive light. Each chamber gives y
 - **Forgiving controls**: undo restores the last rotation, and a reset goes on the undo stack too, so a misclick never costs the route.
 - **Par and stars**: finish at or under par for three stars, within two extra moves for two.
 - **Hints that cost nothing but time**: a dashed mirror shows one correct orientation for five seconds; the move still has to be made.
-- **Help in play**: reopen the field guide from the game controls without losing your route; a board-symbol key and a labeled mixing key spell out every glyph and hue.
+- **Help in play**: reopen the field guide from the game controls without losing your route; a board-symbol key and a labeled mixing key spell out every glyph and hue, and the action stays pinned within reach on small screens.
 - **Keyboard and touch parity**: click or tap a mirror, or move with the arrow keys and rotate with Enter or Space; Z, R and H undo, reset and hint.
 - **Versioned local progress**: stars, best moves and the sound preference live in `localStorage` under `iris.progress.v1`; a corrupt or future record resets instead of breaking, and only the twelve authored chambers count toward lit progress.
 - **Generated audio only**: rotation, charge, lost charge, hint and victory cues are synthesized with the Web Audio API; the repository ships no audio files, makes no network call, and turning sound off or leaving the board stops cues already in flight.
@@ -63,7 +63,7 @@ Mirrors turn through a short quarter-circle when rotated. The drawn slash always
 ## Verification
 
 ```bash
-node --test                       # 112 engine, level, progress, server, audio and UI contract tests
+node --test                       # 113 engine, level, progress, server, audio and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook

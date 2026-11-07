@@ -1105,6 +1105,15 @@ button {
   padding: 16px 26px 24px;
 }
 
+#help-dialog .panel-foot {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  border-top: 1px solid var(--line);
+  border-radius: 0 0 19px 19px;
+  background: var(--ink-2);
+}
+
 .win-stars .star {
   width: 22px;
   height: 22px;

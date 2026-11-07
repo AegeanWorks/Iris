@@ -137,3 +137,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The victory fanfare is scheduled for about half a second. Clicking Chambers or Next during it left every scheduled voice active while the title, chamber index or next level was already on screen. `setMuted` stopped voices, but screen transitions had no stop path.
 - **Decision**: Expose `audio.stop()` and call it from `showTitle`, `showChambers`, `openLevel` and `resetLevel`. The win dialog and the board keep their fanfare; any deliberate screen or level change silences the current cue.
 - **Consequences**: Leaving the board stops the cue immediately, including the win arpeggio. No audio file, network, save or level change. A browser run shows seven scheduled stops plus seven immediate stops on the same win transition, and 112/112 tests are green.
+
+### ADR-019: Pin the help actions to the bottom of the scrollport
+- **Date**: 2026-11-08
+- **Status**: Accepted
+- **Context**: The field guide grew to prose, six rules, four symbol rows and four mixing rows. At 390x844 the dialog is 806px tall with 1039px of content, so the Begin button sat at y=972 and was not visible when the guide opened at its heading. Closing required scrolling to the bottom or tapping outside.
+- **Decision**: Make `#help-dialog .panel-foot` sticky to the bottom of the dialog scrollport with a top border, matching background and bottom corner radius. The guide still opens at its heading and the content still scrolls; the action is simply always reachable.
+- **Consequences**: Static CSS only; no runtime, save or level change. The win dialog is untouched because the rule is scoped to the help dialog. 113/113 tests and the browser narrow-screen check are green.

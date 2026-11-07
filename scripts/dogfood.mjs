@@ -686,12 +686,14 @@ async function main() {
       const dialog = document.getElementById('help-dialog');
       const bounds = dialog.getBoundingClientRect();
       const heading = document.getElementById('help-heading').getBoundingClientRect();
+      const foot = dialog.querySelector('.panel-foot').getBoundingClientRect();
       return {
         open: dialog.open,
         active: document.activeElement && document.activeElement.id,
         scrollTop: dialog.scrollTop,
         headingTop: heading.top,
         dialogTop: bounds.top,
+        footVisible: foot.top >= bounds.top && foot.bottom <= Math.min(bounds.bottom, window.innerHeight),
         overflow: [...dialog.querySelectorAll('.mix-line, .symbol-line')].some((line) => {
           const rect = line.getBoundingClientRect();
           return rect.left < bounds.left || rect.right > bounds.right;
@@ -703,6 +705,9 @@ async function main() {
     }
     if (narrowHelp.headingTop < narrowHelp.dialogTop - 1 || narrowHelp.overflow) {
       throw new Error(`The field guide is clipped on a narrow screen: ${JSON.stringify(narrowHelp)}.`);
+    }
+    if (!narrowHelp.footVisible) {
+      throw new Error(`The field guide actions are not visible on a narrow screen: ${JSON.stringify(narrowHelp)}.`);
     }
 
     await connection.send("Emulation.setDeviceMetricsOverride", {

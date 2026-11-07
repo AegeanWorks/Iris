@@ -1,46 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-wave-1-6",
+    "task_id": "iris-wave-1-15",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794085223.9168687,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794085958.2840579,
     "owner": "opencode:iris-wave",
     "started_by": "opencode:iris-wave",
-    "continuations": [],
-    "completed_at": 1794085263.1266537
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-08",
-      "phase": "planning",
-      "phase_num": 2,
-      "description": "[1/4] UI readability pass 3: add a four-glyph board symbol key to the field guide, with a before/after help pair at 1440 and 390 and a browser overflow check",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794082404.1548336,
-      "timestamp_str": "2026-11-07 23:13:24",
-      "agent": "opencode:iris-cycle",
-      "impact_assessment": {
-        "why": "The field guide names emitters, mirrors, dye cells and receivers in prose but never shows the glyphs the player sees on the board. The README table explains them; the in-game guide does not, so a first-time player has to infer four symbols from the board.",
-        "benefits": "The guide maps circle-arrow, slanted line, ringed circle and double ring to their names and rules in one glance, using the same beam tokens as the board; no runtime or save change.",
-        "risks": "contract: PLAYABLE.md static assets only; dependency: none; concurrency: none; state: help copy only.",
-        "mitigation": "Use CSS-only swatches with existing beam tokens, add failing-first tests for four labeled symbol rows, check both 1440 and 390 widths for horizontal overflow, and keep the guide opening at its heading."
-      },
-      "plan_digest": "4f7471a78153a71513639d4f1ec1ac93d14b58f3dbe2d0eff29fd1542a64fddb"
-    },
-    {
-      "task_id": "iris-cycle-08",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Added the four-glyph board symbol key, its responsive grid and the browser symbol/overflow checks, with a failing-first UI test and 1440/390 pairs",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794082795.1384315,
-      "timestamp_str": "2026-11-07 23:19:55",
-      "agent": "opencode:iris-cycle"
-    },
     {
       "task_id": "iris-cycle-08",
       "phase": "verification",
@@ -296,6 +266,42 @@
       "timestamp": 1794085263.1266558,
       "timestamp_str": "2026-11-08 00:01:03",
       "agent": "opencode:iris-wave"
+    },
+    {
+      "task_id": "iris-wave-1-15",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Verify commits 1-15: keep the field-guide Begin action visible on small screens by pinning the help footer to the scrollport",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794085893.43693,
+      "timestamp_str": "2026-11-08 00:11:33",
+      "agent": "opencode:iris-wave",
+      "impact_assessment": {
+        "why": "At 390x844 the field guide is 806px tall with 1039px of content; the Begin button sits at y=972 and is off-screen when the guide opens at its heading, so closing requires scrolling or tapping outside.",
+        "benefits": "The action is always reachable while the guide content scrolls; the win dialog is untouched; no runtime or save change.",
+        "risks": "contract: static CSS only; dependency: none; concurrency: none; state: none.",
+        "mitigation": "Scope the sticky rule to the help dialog, keep the existing corner radius and background, assert foot visibility in the 320px dogfood, and pair the 390 before/after."
+      },
+      "plan_digest": "e1708ee3539c5b441a6c6b67fca5a8c364d3ad41ab06c1930971f20bba93ffda"
+    },
+    {
+      "task_id": "iris-wave-1-15",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 113/113 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5; 390 pair shows the Begin button pinned at the scrollport",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794085958.2840579,
+      "timestamp_str": "2026-11-08 00:12:38",
+      "agent": "opencode:iris-wave",
+      "handoff": {
+        "state": "7 modified files ready for staging",
+        "next": "commit and push 1->15, then analyze 1->18",
+        "failed": "none",
+        "open": "pre-existing UI delivery warning",
+        "evidence": ".aikit/improvement-record.md wave 1->15, scratch/iris-evidence/wave-1-15"
+      }
     }
   ]
 }
