@@ -303,3 +303,21 @@ Dead ends: none; the board glyphs and colors are already the intended ones.
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** A full find pass over the remaining areas found no further defect that can be reproduced and proven at the current scope; the game is at a clean stopping point pending user direction.
+
+## Cycle 12 — 2026-11-07 — Find pass: zero verified improvements
+
+**Audit.** Re-read the remaining areas against the codebase and the latest build:
+- **Combat feel**: rotation animation, Z/R/H shortcuts, undoable reset, hint/charge/uncharge/win cues and focus restoration all have current browser checks; no new reproducible input defect.
+- **Enemies/bosses**: not applicable to a turn-based additive-light puzzle; there is no entity or boss system to improve.
+- **Levels**: all 12 chambers pass the solver and par checks, The Vault uses walls, episode/campaign finales are marked; adding chambers would be new scope, not a defect.
+- **UI readability**: title, chamber index, game HUD, field guide (symbols, mixing, walls, shortcuts) and victory dialog were checked at 320, 390 and 1440. The guide scrolls at 390 but opens at its heading and every key row fits with no horizontal overflow.
+- **Graphics and effects**: mirror glyph direction and quarter-turn animation, beams, dyes, receivers, emitters and walls have no reproducible mismatch after the glyph correction.
+- **Audio cues**: hint, charge, uncharge and win cues are distinct; mute cancels active voices; the sound preference persists; no reproducible gap.
+- **Progression and saves**: ghost ids are ignored in summaries, real solves still save, stars and best moves persist, and finales are marked; no reproducible gap.
+- **Tests**: 111/111 unit/integration tests and the browser dogfood cover every control, dialog, audio path and save transition; no uncovered user-visible defect was found.
+
+**Dead ends.** The `UI contract not delivery-ready` warning is a pre-existing AIKit process warning (the surface has no finished UI-task digest); fixing it would require a new UI-task baseline, not a game change. The 390px help scroll is expected and usable. The emitter swatch arrow was already widened in cycle 11.
+
+**No code changes.** Final scripted campaign replay: 12/12 chambers lit, 36/36 stars, every victory saved (`scratch/iris-evidence/final-campaign/`). Full gates re-run green: `node --test` 111/111, `node scripts/check-levels.mjs` 12/12, `node scripts/ui-inventory.mjs` 19 entries, `node scripts/dogfood.mjs` OK, `python aikit.py check iris` 5/5.
+
+**Stop.** This find pass produced zero verified improvements with screenshot or played-run proof, so the improvement loop stops here pending new direction.
