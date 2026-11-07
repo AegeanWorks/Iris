@@ -3,24 +3,15 @@
   "active_task": {
     "task_id": "iris-wave-1-6",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794085223.9168687,
     "owner": "opencode:iris-wave",
     "started_by": "opencode:iris-wave",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794085263.1266537
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-07",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-cycle-07' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794082340.5185814,
-      "timestamp_str": "2026-11-07 23:12:20",
-      "agent": "opencode:iris-cycle"
-    },
     {
       "task_id": "iris-cycle-08",
       "phase": "planning",
@@ -295,6 +286,16 @@
         "open": "pre-existing UI delivery warning",
         "evidence": ".aikit/improvement-record.md wave 1->6, scratch/iris-evidence/wave-1-6-after"
       }
+    },
+    {
+      "task_id": "iris-wave-1-6",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-wave-1-6' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794085263.1266558,
+      "timestamp_str": "2026-11-08 00:01:03",
+      "agent": "opencode:iris-wave"
     }
   ]
 }
