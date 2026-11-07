@@ -109,3 +109,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The field guide named emitters, mirrors, dye cells and receivers in prose but never showed the four glyphs the player sees. The README table explained them, but a first-time player had to infer the board symbols while playing.
 - **Decision**: Add a `Board symbols` key above the mixing key with four CSS swatches drawn from the same beam tokens: a red emitter with its arrow, a slash mirror, a green dye ring and a white receiver ring with a cyan dot. Each row names the glyph and its rule. The swatches are decorative (`aria-hidden`), while the label text carries the meaning.
 - **Consequences**: No runtime, save, level or dependency change. The help dialog is taller and scrolls at 390px, but it still opens at its heading; the 2x2 key collapses to one column on mobile. 106/106 tests and the browser dogfood are green.
+
+### ADR-015: Put the pre-reset board on the undo stack
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: `resetLevel` called `openLevel`, which cleared the undo stack and the move count. Reset sits beside Undo, and one misclick wiped the route with no recovery even though every rotation was undoable.
+- **Decision**: Reset now pushes the current game and move count onto the undo stack, recreates the level from its frozen data, clears the hint and its timer, and re-renders without changing the open level or preview mode. A reset after a win (Replay) clears the stack instead, and the existing 80-step cap still applies.
+- **Consequences**: Reset is reversible during play; Undo is enabled immediately after a reset and restores the pre-reset board. No save, level or dependency change. 107/107 tests, a reset-state pair showing Undo enabled and a rotate-reset-undo run are green.

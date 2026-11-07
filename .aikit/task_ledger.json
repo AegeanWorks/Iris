@@ -1,48 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-08",
+    "task_id": "iris-cycle-09",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794082814.4033787,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794083545.398319,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794082844.6792853
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-04",
-      "phase": "superseded",
-      "phase_num": 4,
-      "description": "Superseded by 'iris-cycle-05' without --complete or --reset",
-      "status": "superseded",
-      "timestamp": 1794080977.2028275,
-      "timestamp_str": "2026-11-07 22:49:37",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-05",
-      "phase": "suspended",
-      "phase_num": 2,
-      "description": "Task 'iris-cycle-05' suspended: complete cycle 4 bookkeeping first",
-      "status": "suspended",
-      "timestamp": 1794081013.0528557,
-      "timestamp_str": "2026-11-07 22:50:13",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-04",
-      "phase": "resumed",
-      "phase_num": 4,
-      "description": "Resumed 'iris-cycle-04' after a pause",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081013.7226436,
-      "timestamp_str": "2026-11-07 22:50:13",
-      "agent": "opencode:iris-cycle"
-    },
     {
       "task_id": "iris-cycle-04",
       "phase": "completed",
@@ -273,6 +241,53 @@
       "timestamp": 1794082844.6792874,
       "timestamp_str": "2026-11-07 23:20:44",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-09",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Input feel pass 2: make Reset undoable so an accidental restart can be recovered, proven by a same-state reset screenshot pair and a rotate-reset-undo played run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794082905.1282616,
+      "timestamp_str": "2026-11-07 23:21:45",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "Reset calls openLevel, which clears the undo stack and the move count. A player who misclicks Reset loses the whole route with no way back, even though Undo sits next to Reset and normally restores every other move.",
+        "benefits": "Reset becomes another reversible action: the pre-reset board and move count go on the undo stack, Undo is enabled after a reset, and the existing 80-step bound and hint cleanup still apply.",
+        "risks": "contract: no save or level change; dependency: none; concurrency: none; state: undo stack growth, preview mode must stay preview, hints and timers must clear.",
+        "mitigation": "Keep reset on the current level object, push the previous game before recreating it, clear the hint timer, cap the stack at 80, and verify preview reset plus rotate-reset-undo in the browser dogfood."
+      },
+      "plan_digest": "8c426d17e4079b02e9b38567c15ac050f3c29642756cdccb5f7fd6d9077e666b"
+    },
+    {
+      "task_id": "iris-cycle-09",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Made reset push the pre-reset board, recreated the level in place, cleared hints and preserved preview, with a failing-first reset/undo browser run and same-scroll before/after pairs",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794083530.2316594,
+      "timestamp_str": "2026-11-07 23:32:10",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-09",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 107/107 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with undoable reset, aikit 5/5 gates; reset-state pair shows Undo enabled and the reset/undo run restores the route",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794083545.398319,
+      "timestamp_str": "2026-11-07 23:32:25",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "6 modified files ready for explicit staging",
+        "next": "commit cycle 9, then consider audio mute cancellation or another verified finding",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, scheduled tones survive mute",
+        "evidence": ".aikit/improvement-record.md cycle 9, scratch/iris-evidence/cycle-09"
+      }
     }
   ]
 }

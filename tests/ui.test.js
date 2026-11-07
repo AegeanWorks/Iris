@@ -162,6 +162,14 @@ test("the victory dialog marks episode and campaign finales", () => {
   assert.match(app, /Episode \$\{nextEpisode\.numeral\}/);
 });
 
+test("reset keeps the previous board undoable", () => {
+  assert.match(
+    app,
+    /function resetLevel\(\) \{[\s\S]*?state\.undoStack\.push\(\{ game: state\.game, moves: state\.moves \}\)/,
+  );
+  assert.match(app, /state\.game = createGame\(state\.level\)/);
+});
+
 test("the field guide opens at its heading", () => {
   assert.match(html, /id="help-heading" tabindex="-1"/);
   assert.match(app, /helpHeading: required\("help-heading"\)/);

@@ -223,3 +223,30 @@ Dead ends: none; the four glyphs are exactly the board's four special tiles.
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** Turning sound off still does not stop already-scheduled oscillators. The emitter swatch's arrow is small at normal size; a future polish pass could thicken it if play notes show it is missed.
+
+## Cycle 9 — 2026-11-07 — Input feel, pass 2: undoable reset
+
+**Find.** `resetLevel` called `openLevel`, which cleared the undo stack and the move count. Reset sits next to Undo, so one misclick lost the whole route even though every rotation was undoable. The first browser run after a rotate-then-reset reported `{"moves":"0","orientation":"/","undoDisabled":true}`: the reset worked, but there was no way back.
+
+**Analyze.** Survivors:
+1. Push the current game and move count onto the undo stack before resetting during play.
+2. Recreate the level from its frozen data, clear the hint and timer, and re-render without changing the open level or preview mode.
+3. Keep Replay after a win clean by clearing the stack instead of making the winning board undoable.
+Dead ends: none; the existing 80-step stack and hint cleanup already cover the edge cases.
+
+**Implement.** `src/ui/app.js` now resets in place: during play it pushes `{ game, moves }`, then `createGame(state.level)`, zero moves, clears the hint, spin and timer, and calls `renderGame()`. A reset after a win clears the stack. `tests/ui.test.js` guards the push and the in-place recreation; `scripts/dogfood.mjs` rotates, resets, undoes the reset, and undoes again to the clean board.
+
+**Proof.**
+- Reset-state pair, same `?level=double-bend` state after one rotation and a reset, 1440x900: `cycle-09/pair-reset-1440.png`; zoom `cycle-09/pair-zoom-reset.png`. Before: Undo dim and disabled; after: Undo bright and enabled, with moves 0 and the initial mirror.
+- Undo-after-reset pair, same state: `cycle-09/pair-reset-undo-1440.png`. Before: undo does nothing, board stays at 0 moves; after: the pre-reset board returns at 1 move with the beam bent down.
+- Played run: rotate → reset (`0` moves, `/`, Undo enabled) → Undo (`1` move, `\`) → Undo again (`0` moves, `/`, Undo disabled). The dogfood performs exactly this sequence.
+- Failing-first browser run: `Reset did not leave an undoable baseline: {"moves":"0","orientation":"/","undoDisabled":true}` before the change.
+
+**Gates.**
+- `node --test` → 107 pass, 0 fail (was 106).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including the reset/undo sequence, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** Turning sound off still does not stop already-scheduled oscillators. The field guide's emitter swatch arrow is small at normal size.

@@ -648,7 +648,22 @@ function resetLevel() {
   if (!state.level) {
     return;
   }
-  openLevel(state.level.id, { preview: Boolean(state.preview) });
+  const wasWon = state.won;
+  if (wasWon) {
+    state.undoStack = [];
+  } else if (state.moves > 0) {
+    state.undoStack.push({ game: state.game, moves: state.moves });
+    if (state.undoStack.length > 80) {
+      state.undoStack.shift();
+    }
+  }
+  state.game = createGame(state.level);
+  state.moves = 0;
+  state.hint = null;
+  state.spin = null;
+  state.won = false;
+  clearHintTimer();
+  renderGame();
 }
 
 function showHint() {

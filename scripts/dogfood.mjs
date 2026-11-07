@@ -390,6 +390,34 @@ async function main() {
       throw new Error(`R did not reset the chamber and clear the hint: ${JSON.stringify(resetShortcut)}.`);
     }
 
+    await clickMirror(connection, 2, 1);
+    await clickSelector(connection, "#btn-reset");
+    const resetState = await connection.evaluate(`(() => ({
+      moves: document.getElementById('move-count').textContent,
+      orientation: document.querySelector('.tile-tile[data-x="2"][data-y="1"]').dataset.orientation,
+      undoDisabled: document.getElementById('btn-undo').disabled
+    }))()`);
+    if (resetState.moves !== "0" || resetState.orientation !== "/" || resetState.undoDisabled) {
+      throw new Error(`Reset did not leave an undoable baseline: ${JSON.stringify(resetState)}.`);
+    }
+    await clickSelector(connection, "#btn-undo");
+    const restored = await connection.evaluate(`(() => ({
+      moves: document.getElementById('move-count').textContent,
+      orientation: document.querySelector('.tile-tile[data-x="2"][data-y="1"]').dataset.orientation
+    }))()`);
+    if (restored.moves !== "1" || restored.orientation !== "\\") {
+      throw new Error(`Undo after reset did not restore the route: ${JSON.stringify(restored)}.`);
+    }
+    await clickSelector(connection, "#btn-undo");
+    const clean = await connection.evaluate(`(() => ({
+      moves: document.getElementById('move-count').textContent,
+      orientation: document.querySelector('.tile-tile[data-x="2"][data-y="1"]').dataset.orientation,
+      undoDisabled: document.getElementById('btn-undo').disabled
+    }))()`);
+    if (clean.moves !== "0" || clean.orientation !== "/" || !clean.undoDisabled) {
+      throw new Error(`The second undo did not return to the baseline: ${JSON.stringify(clean)}.`);
+    }
+
     await connection.evaluate(`(() => {
       window.__irisTurns = [];
       document.addEventListener('animationstart', (event) => {
@@ -710,7 +738,7 @@ async function main() {
         !campaignWin.text.includes("All three episodes complete")) {
       throw new Error(`The campaign finale was not marked: ${JSON.stringify(campaignWin)}.`);
     }
-    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, Z/R/H shortcuts, hint, hint/charge/uncharge/win audio, in-game help, board-symbol and mixing keys, episode/campaign finales, preview and responsive board.");
+    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, Z/R/H shortcuts, undoable reset, hint, hint/charge/uncharge/win audio, in-game help, board-symbol and mixing keys, episode/campaign finales, preview and responsive board.");
     return 0;
   } catch (error) {
     console.error(`[FAIL] Iris dogfood: ${error.message}`);
