@@ -2,7 +2,7 @@
 
 Continuous improvement cycles for Iris. One area per cycle. Each entry names the defect evidence, the fix, the screenshot pair and the played run. Screenshot files live outside the repository in `scratch/iris-evidence/cycle-N/` and are not committed; binaries never enter the tree.
 
-Covered areas: UI readability (cycle 1).
+Covered areas: UI readability (cycle 1), graphics and effects (cycle 2).
 
 ## Cycle 1 — 2026-11-07 — UI readability: field-guide mixing key
 
@@ -32,3 +32,31 @@ Dead ends: none; the row was reproduced in the served page and the measurements 
 - `python aikit.py check iris` → 5/5 gates passed (the pre-existing `UI contract not delivery-ready` warning remains; the UI surface has no finished task digest).
 
 **Next findings.** The win dialog probably opens scrolled to its bottom action on a 320x568 screen for the same focus reason; verify when the UI area rotates again. Keyboard focus after arrow navigation still uses plain `.focus()` and can scroll a small viewport.
+
+## Cycle 2 — 2026-11-07 — Graphics and effects: mirror glyph and quarter turn
+
+**Find.** The mirror glyph was drawn on the wrong diagonal. Browser measurement of White Chapel showed both logical slash mirrors at `+45deg`, the shape of a backslash (`cycle-02/before-glyph-1440.png`). In the same state the red beam reached the bottom-left mirror and turned west, which is the correct reflection for a slash but the opposite of what the drawn backslash promised. The core verb also snapped: `renderBoard()` rebuilt the button and swapped the line between `+45deg` and `-45deg` in one frame with no motion.
+
+**Analyze.** Survivors:
+1. Invert the static transforms so `data-orientation="/"` is drawn at `-45deg` and `"\"` at `+45deg`; the engine's `reflect` table stays authoritative.
+2. Animate the new glyph through a 180ms quarter turn in the direction of the click, keyed by the pre-rotation orientation.
+3. Keep the instant swap for `prefers-reduced-motion`.
+Dead ends: delaying the beam trace until the animation ends would add input latency; the beam stays synchronous while the glyph is a flourish.
+
+**Implement.** `src/styles.css` swaps the two static transforms and adds `mirror-turn-cw` / `mirror-turn-ccw` keyframes on `data-spin`. `src/ui/app.js` records `state.spin` from the previous orientation, marks the rebuilt mirror `cw` or `ccw`, and clears the flag after one render. `tests/ui.test.js` guards the spin wiring and keyframes; `scripts/dogfood.mjs` now measures every mirror glyph angle in the live DOM, asserts the animation name and 180ms duration, and checks the settled orientation. The dogfood also exits cleanly after a green run instead of leaving a keep-alive socket holding the shell.
+
+**Proof.**
+- Glyph pair, same White Chapel state after one top-mirror rotation (moves 1), 1440x900: `cycle-02/pair-glyph-1440.png`; zoom `cycle-02/pair-zoom-glyph.png`. Before, the bottom mirror reads as a backslash while the beam turns west; after, it reads as a slash and the beam still turns west. DOM angles: before `"/" -> +45`; after `"/" -> -45` and `"\" -> +45`.
+- Animation pair, same build and same White Chapel state after the same rotation, 1440x900: `cycle-02/pair-anim-1440.png`; zoom `cycle-02/pair-zoom-anim.png`. Before (reduced motion) the line is already at the final `-45deg` with `lineAnimations: 0`; after (no-preference, paused at 90ms) the line is horizontal mid-turn with `mirror-turn-cw`, 180ms. The three-frame strip `cycle-02/strip-zoom-anim-1440.png` shows slash, horizontal, backslash.
+- The failing-first browser check reported `[{"x":"2","y":"1","orientation":"/","degrees":45},{"x":"2","y":"4","orientation":"/","degrees":45}]` before the fix and passed after.
+
+**Played run.** The scripted campaign played all 12 chambers from the title after the fix: 12/12 lit, 36/36 stars, every victory saved (`cycle-02/campaign/`). Each entry used the real click path and read the live move, receiver, star and storage state.
+
+**Gates.**
+- `node --test` → 87 pass, 0 fail.
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` in 18.1s, exit 0, including glyph angles, animation and narrow help checks.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** The win dialog still focuses its first button on open, which can scroll its heading out of view at 320x568. Arrow-key focus does not use `preventScroll`, so the page can jump on short screens.

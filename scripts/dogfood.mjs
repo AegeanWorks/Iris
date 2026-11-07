@@ -197,7 +197,7 @@ async function pressKey(connection, key, code, windowsVirtualKeyCode, text = "")
   await wait(140);
 }
 
-async function clickMirror(connection, x, y) {
+async function clickMirror(connection, x, y, waitMs = 140) {
   const center = await connection.evaluate(`(() => {
     const node = document.querySelector('.tile-tile[data-x="${x}"][data-y="${y}"]');
     if (!node) return null;
@@ -218,7 +218,7 @@ async function clickMirror(connection, x, y) {
       clickCount: 1,
     });
   }
-  await wait(140);
+  await wait(waitMs);
 }
 
 async function main() {
@@ -321,7 +321,44 @@ async function main() {
     if (!tabs.every((value) => value === 0)) {
       throw new Error(`Some mirrors are not keyboard reachable: ${JSON.stringify(tabs)}.`);
     }
-    await clickMirror(connection, 2, 1);
+    const mirrorAngles = await connection.evaluate(`(() => {
+      return [...document.querySelectorAll('.tile-tile')].map((button) => {
+        const line = button.querySelector('.mirror-line');
+        const matrix = new DOMMatrix(getComputedStyle(line).transform);
+        return {
+          x: button.dataset.x,
+          y: button.dataset.y,
+          orientation: button.dataset.orientation,
+          degrees: Math.round(Math.atan2(matrix.b, matrix.a) * 180 / Math.PI)
+        };
+      });
+    })()`);
+    const wrongAngles = mirrorAngles.filter((mirror) =>
+      mirror.orientation === "/" ? mirror.degrees !== -45 : mirror.degrees !== 45);
+    if (wrongAngles.length) {
+      throw new Error(`A mirror glyph does not match its orientation: ${JSON.stringify(wrongAngles)}.`);
+    }
+    await connection.evaluate(`(() => {
+      window.__irisTurns = [];
+      document.addEventListener('animationstart', (event) => {
+        const line = event.target;
+        if (!line || !line.classList || !line.classList.contains('mirror-line')) {
+          return;
+        }
+        const button = line.closest('.tile-tile');
+        const animation = line.getAnimations().find(
+          (candidate) => candidate.animationName === event.animationName
+        );
+        window.__irisTurns.push({
+          name: event.animationName,
+          x: button ? button.dataset.x : null,
+          y: button ? button.dataset.y : null,
+          duration: animation && animation.effect ? animation.effect.getTiming().duration : null
+        });
+      }, true);
+      return true;
+    })()`);
+    await clickMirror(connection, 2, 1, 0);
     const focus = await connection.evaluate(`(() => ({
       x: document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.x : null,
       y: document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.y : null,
@@ -329,6 +366,34 @@ async function main() {
     }))()`);
     if (focus.x !== "2" || focus.y !== "1" || focus.moves !== "1") {
       throw new Error(`Focus was lost after a rotation: ${JSON.stringify(focus)}.`);
+    }
+    await waitFor(
+      connection,
+      "window.__irisTurns.length > 0",
+      "the mirror turn to start",
+      2000,
+    );
+    const turns = await connection.evaluate("window.__irisTurns");
+    const turn = turns.find((entry) => entry.x === "2" && entry.y === "1");
+    if (!turn || !String(turn.name).startsWith("mirror-turn") || turn.duration !== 180) {
+      throw new Error(`The mirror did not animate its quarter turn: ${JSON.stringify(turns)}.`);
+    }
+    await waitFor(
+      connection,
+      "document.querySelector('.tile-tile[data-x=\"2\"][data-y=\"1\"] .mirror-line').getAnimations().length === 0",
+      "the mirror turn to settle",
+    );
+    const settled = await connection.evaluate(`(() => {
+      const line = document.querySelector('.tile-tile[data-x="2"][data-y="1"] .mirror-line');
+      const matrix = line ? new DOMMatrix(getComputedStyle(line).transform) : null;
+      return {
+        count: line ? line.getAnimations().length : -1,
+        orientation: document.querySelector('.tile-tile[data-x="2"][data-y="1"]').dataset.orientation,
+        degrees: matrix ? Math.round(Math.atan2(matrix.b, matrix.a) * 180 / Math.PI) : null
+      };
+    })()`);
+    if (settled.count !== 0 || settled.orientation !== "\\" || settled.degrees !== 45) {
+      throw new Error(`The mirror animation did not settle on the new orientation: ${JSON.stringify(settled)}.`);
     }
     await pressKey(connection, "ArrowDown", "ArrowDown", 40);
     const moved = await connection.evaluate(`(() => ({
@@ -536,3 +601,6 @@ async function main() {
 }
 
 process.exitCode = await main();
+// A finished browser session can leave a keep-alive socket open; do not let it
+// turn a green dogfood pass into a hung shell command.
+setTimeout(() => process.exit(process.exitCode ?? 0), 100).unref();

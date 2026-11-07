@@ -136,6 +136,13 @@ test("the field guide opens at its heading", () => {
   );
 });
 
+test("a rotated mirror animates its quarter turn", () => {
+  assert.match(app, /state\.spin = \{ x, y, cw:/);
+  assert.match(app, /button\.dataset\.spin = spin\.cw \? "cw" : "ccw"/);
+  assert.match(styles, /@keyframes mirror-turn-cw/);
+  assert.match(styles, /@keyframes mirror-turn-ccw/);
+});
+
 test("the page is a self-contained static document", () => {
   assert.match(html, /<script type="module" src="\.\/src\/ui\/app\.js"><\/script>/);
   assert.match(html, /href="\.\/src\/theme\.css"/);

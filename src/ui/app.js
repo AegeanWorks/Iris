@@ -101,6 +101,7 @@ const state = {
   progress: loadProgress(),
   sound: true,
   preview: null,
+  spin: null,
 };
 
 state.sound = state.progress.settings.sound !== false;
@@ -296,6 +297,7 @@ function openLevel(levelId, { preview = false } = {}) {
   state.hint = null;
   state.won = false;
   state.preview = preview ? levelId : null;
+  state.spin = null;
   clearHintTimer();
   refs.winDialog.close?.();
   renderGame();
@@ -346,6 +348,8 @@ function describeProgress(trace) {
 
 function renderBoard(trace) {
   const level = state.level;
+  const spin = state.spin;
+  state.spin = null;
   const focused = document.activeElement?.closest?.(".tile-tile");
   const focusKey =
     focused && refs.board.contains(focused)
@@ -444,6 +448,9 @@ function renderBoard(trace) {
         button.dataset.y = String(y);
         button.dataset.orientation = orientationAt(state.game, x, y);
         button.tabIndex = 0;
+        if (spin && spin.x === x && spin.y === y) {
+          button.dataset.spin = spin.cw ? "cw" : "ccw";
+        }
         const orientation = orientationAt(state.game, x, y);
         button.setAttribute(
           "aria-label",
@@ -545,11 +552,13 @@ function rotateAt(x, y) {
     return;
   }
   const before = traceGame(state.game);
+  const previousOrientation = orientationAt(state.game, x, y);
   state.undoStack.push({ game: state.game, moves: state.moves });
   if (state.undoStack.length > 80) {
     state.undoStack.shift();
   }
   state.game = rotateMirror(state.game, x, y);
+  state.spin = { x, y, cw: previousOrientation === "/" };
   state.moves += 1;
   state.hint = null;
   clearHintTimer();

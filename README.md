@@ -56,10 +56,12 @@ Deep links used by the website and by reviewers:
 
 Color is a bit mask: red `1`, green `2`, blue `4`. Yellow is red + green, cyan is green + blue, magenta is red + blue, and white is all three. A beam keeps its color until a dye cell adds another primary, and a receiver that gets red alone will not accept yellow.
 
+Mirrors turn through a short quarter-circle when rotated. The drawn slash always matches the direction the beam reflects, and reduced-motion users get the instant swap.
+
 ## Verification
 
 ```bash
-node --test                       # 86 engine, level, progress, server and UI contract tests
+node --test                       # 87 engine, level, progress, server and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook

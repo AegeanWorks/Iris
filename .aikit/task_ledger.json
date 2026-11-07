@@ -1,63 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-01",
+    "task_id": "iris-cycle-02",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794077321.765444,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794079331.8725886,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794077399.8729775
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/6] Plan Iris: a pure additive-color beam engine, twelve verified chambers, static browser UI, local launcher, and a Play-page deployment contract",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793299111.6175554,
-      "timestamp_str": "2026-10-29 21:38:31",
-      "agent": "kilo:iris",
-      "impact_assessment": {
-        "why": "The AegeanWorks Play catalog offers two browser puzzles; a third original title about additive color mixing gives visitors a distinct mechanic, a zero-install game, and a new showcase for the platform's static-build pipeline.",
-        "benefits": "A complete offline-capable browser puzzle with deterministic engine and solver tests, frozen levels with equal-par solutions, versioned progress, generated audio, and a documented website contract; no runtime dependencies and no backend.",
-        "risks": "contract: new project plus a future third Play-catalog entry; dependency: none beyond Node 20 for tests and tooling; concurrency: the AegeanWorks website playable integration may be uncommitted; state: localStorage progress, media review stamps and copied build digests.",
-        "mitigation": "Build and test the engine and solver before the UI, freeze every level with a verified equal-par solution, keep runtime files under index.html and src/assets, and run the project and website gates before any commit or publish."
-      }
-    },
-    {
-      "task_id": "iris-v1",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "[2/6]-[4/6] Implemented the additive-color beam engine, exhaustive solver, twelve frozen chambers, static browser UI with keyboard and touch parity, generated audio, versioned progress, launchers, reviewed brand assets and the Play-page contract",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793307845.2727993,
-      "timestamp_str": "2026-10-30 00:04:05",
-      "agent": "kilo:iris"
-    },
-    {
-      "task_id": "iris-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[6/6] Verification complete; checklists: passed; 67/67 tests, mechanics gate, browser dogfood, 40 interaction checks and the AegeanWorks static-contract validator all pass",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793307853.9775035,
-      "timestamp_str": "2026-10-30 00:04:13",
-      "agent": "kilo:iris",
-      "handoff": {
-        "state": "5 modified and 11 untracked files, .aikit/ui.json must be committed before ui begin/verify/finish",
-        "next": "review the uncommitted diff, commit and publish Iris, then add the Play-catalog entry and run the website sync",
-        "failed": "none",
-        "open": "no commit or push because the host forbids commits not explicitly requested",
-        "evidence": "node --test tests 67 pass, dogfood OK, interaction flow OK, validate_source OK"
-      }
-    },
     {
       "task_id": "iris-v1",
       "phase": "phase 4",
@@ -313,6 +266,53 @@
       "timestamp": 1794077399.8729794,
       "timestamp_str": "2026-11-07 21:49:59",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-02",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Graphics and effects: animate the mirror line through a 180ms quarter turn in the click direction, proven by a paused mid-turn screenshot pair and a browser run that reads the animation and its final orientation",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794077803.177987,
+      "timestamp_str": "2026-11-07 21:56:43",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "Every mirror rotation rebuilds the board and swaps the line from +45deg to -45deg in one frame; the interaction has no motion, so the core verb of the game reads as a teleport rather than a turn.",
+        "benefits": "A short, direction-aware quarter-turn makes the central interaction legible and satisfying without changing the beam result, controls, timing or save format; reduced-motion users keep the instant swap.",
+        "risks": "contract: PLAYABLE.md static assets only; dependency: none; concurrency: none; state: no progress or level data change.",
+        "mitigation": "Drive the animation from a transient state.spin keyed to the rotated cell, honour prefers-reduced-motion through the existing global rule, add a failing dogfood check before the CSS, and re-run the full campaign after the change."
+      },
+      "plan_digest": "5821159d7782aedce6617f9378098deeddac9a35f56558f2849b25f9f30ead98"
+    },
+    {
+      "task_id": "iris-cycle-02",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Corrected the inverted mirror glyph, added the direction-aware 180ms quarter-turn animation, and expanded dogfood to measure glyph angles, the animationstart event and the settled orientation",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794079315.1424425,
+      "timestamp_str": "2026-11-07 22:21:55",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-02",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 87/87 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK twice in a row and under load, aikit 5/5 gates; glyph before/after pair at 1440, animation instant/mid-turn pair and three-frame strip, full 12-chamber campaign",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794079331.8725886,
+      "timestamp_str": "2026-11-07 22:22:11",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "7 modified and 1 untracked file ready for explicit staging",
+        "next": "commit cycle 2, then start cycle 3 on audio cues",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus and arrow-key scroll deferred",
+        "evidence": ".aikit/improvement-record.md cycle 2, scratch/iris-evidence/cycle-02"
+      }
     }
   ]
 }

@@ -665,11 +665,19 @@ button {
 }
 
 .tile-tile[data-orientation="/"] .mirror-line {
-  transform: rotate(45deg);
+  transform: rotate(-45deg);
 }
 
 .tile-tile[data-orientation="\\"] .mirror-line {
-  transform: rotate(-45deg);
+  transform: rotate(45deg);
+}
+
+.tile-tile[data-spin="cw"] .mirror-line {
+  animation: mirror-turn-cw 180ms ease-in-out;
+}
+
+.tile-tile[data-spin="ccw"] .mirror-line {
+  animation: mirror-turn-ccw 180ms ease-in-out;
 }
 
 .hint-ghost {
@@ -1064,6 +1072,24 @@ button {
   50% {
     transform: scale(1.03);
     opacity: 1;
+  }
+}
+
+@keyframes mirror-turn-cw {
+  from {
+    transform: rotate(-45deg);
+  }
+  to {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes mirror-turn-ccw {
+  from {
+    transform: rotate(45deg);
+  }
+  to {
+    transform: rotate(-45deg);
   }
 }
 
