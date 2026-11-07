@@ -3,24 +3,15 @@
   "active_task": {
     "task_id": "iris-cycle-09",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794083545.398319,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794083602.7479596
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-04",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-cycle-04' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794081014.3050168,
-      "timestamp_str": "2026-11-07 22:50:14",
-      "agent": "opencode:iris-cycle"
-    },
     {
       "task_id": "iris-cycle-05",
       "phase": "resumed",
@@ -288,6 +279,16 @@
         "open": "pre-existing UI contract delivery warning, scheduled tones survive mute",
         "evidence": ".aikit/improvement-record.md cycle 9, scratch/iris-evidence/cycle-09"
       }
+    },
+    {
+      "task_id": "iris-cycle-09",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-cycle-09' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794083602.7479627,
+      "timestamp_str": "2026-11-07 23:33:22",
+      "agent": "opencode:iris-cycle"
     }
   ]
 }
