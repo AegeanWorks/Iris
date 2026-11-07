@@ -63,7 +63,7 @@ Mirrors turn through a short quarter-circle when rotated. The drawn slash always
 ## Verification
 
 ```bash
-node --test                       # 110 engine, level, progress, server, audio and UI contract tests
+node --test                       # 111 engine, level, progress, server, audio and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook

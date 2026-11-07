@@ -137,6 +137,15 @@ test("the field guide shows a board symbol key", () => {
   }
 });
 
+test("the symbol key explains the receiver ring and dot", () => {
+  const start = html.indexOf('id="help-dialog"');
+  const end = html.indexOf("</dialog>", start);
+  const help = html.slice(start, end);
+  assert.match(help, /ring wants one exact hue/i);
+  assert.match(help, /dot shows what arrives/i);
+  assert.match(styles, /\.symbol-arrow \{[\s\S]*?border-width: 5px 0 5px 9px/);
+});
+
 test("the field guide explains that walls stop light", () => {
   const start = html.indexOf('id="help-dialog"');
   const end = html.indexOf("</dialog>", start);

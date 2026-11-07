@@ -1,64 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-10",
+    "task_id": "iris-cycle-11",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794083928.020513,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794084389.2462995,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794083986.014506
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-06",
-      "phase": "planning",
-      "phase_num": 2,
-      "description": "[1/4] Input feel: add Z/R/H keyboard shortcuts for undo, reset and hint, document them in the field guide and README, and prove them with a keyboard-only browser run plus a before/after help dialog pair",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081348.752644,
-      "timestamp_str": "2026-11-07 22:55:48",
-      "agent": "opencode:iris-cycle",
-      "impact_assessment": {
-        "why": "The board supports arrow keys and Enter/Space, but undo, reset and hint still require a pointer. A keyboard-only player can rotate but cannot recover, restart or ask for a hint without leaving the keys.",
-        "benefits": "The three recovery actions get single-key shortcuts that stay out of the way of typing, dialogs and modified chords; the field guide and aria-keyshortcuts make the bindings discoverable and screen-reader visible.",
-        "risks": "contract: no runtime dependency or save change; dependency: none; concurrency: none; state: shortcuts must not fire behind an open dialog or after a win.",
-        "mitigation": "Guard the handler on the game screen, an open dialog, a winning board and modifier keys; add a browser run that presses Z, H and R; keep Enter/Space and pointer behavior unchanged."
-      },
-      "plan_digest": "322872644fa7a9e72dea4ce15f82232f8762a033cc41eae59bbee4d350a6cbf5"
-    },
-    {
-      "task_id": "iris-cycle-06",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Added the guarded Z/R/H keydown handler, aria-keyshortcuts and field-guide rule, with a failing-first browser check that now presses all three keys",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081639.3251684,
-      "timestamp_str": "2026-11-07 23:00:39",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-06",
-      "phase": "verification",
-      "phase_num": 4,
-      "description": "[4/4] Verification complete; checklists: passed; 103/103 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with Z/R/H, aikit 5/5 gates; before/after help pair shows the shortcut rule and the keyboard run checks undo, hint and reset",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794081653.8910859,
-      "timestamp_str": "2026-11-07 23:00:53",
-      "agent": "opencode:iris-cycle",
-      "handoff": {
-        "state": "7 modified files ready for explicit staging",
-        "next": "commit cycle 6, then fix the win-dialog focus on short screens or celebrate episode completion",
-        "failed": "none",
-        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
-        "evidence": ".aikit/improvement-record.md cycle 6, scratch/iris-evidence/cycle-06"
-      }
-    },
     {
       "task_id": "iris-cycle-06",
       "phase": "completed",
@@ -296,6 +248,53 @@
       "timestamp": 1794083986.0145085,
       "timestamp_str": "2026-11-07 23:39:46",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-11",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] UI readability pass 4: explain the receiver ring and dot in the symbol key and make the emitter swatch arrow legible, with 1440/390 help pairs",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794084019.0569208,
+      "timestamp_str": "2026-11-07 23:40:19",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "The symbol key says only that a receiver wants one exact hue. The board actually draws the target as the ring and the incoming color as the center dot, which is the one convention the key does not explain. The emitter swatch arrow is also hard to see at normal size.",
+        "benefits": "A first-time player can read the receiver state from the glyph after one look, and the emitter direction is visible in the key without zooming; no runtime or save change.",
+        "risks": "contract: static help copy and CSS only; dependency: none; concurrency: none; state: none.",
+        "mitigation": "Keep the explanation in the receiver label, enlarge the swatch arrow without changing the board glyphs, add a failing-first copy test, and re-check 1440/390 overflow."
+      },
+      "plan_digest": "019a903017fa05e49d09bc5ffca400c5d7643f912331077974ee62af7733d5f9"
+    },
+    {
+      "task_id": "iris-cycle-11",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Added the receiver ring/dot copy and the wider emitter swatch arrow, with a failing-first copy/CSS test and 1440/390 help pairs",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794084368.7790263,
+      "timestamp_str": "2026-11-07 23:46:08",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-11",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 111/111 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; receiver copy and emitter arrow pairs recorded at 1440 and 390",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794084389.2462995,
+      "timestamp_str": "2026-11-07 23:46:29",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "7 modified files ready for explicit staging",
+        "next": "commit cycle 11 and close the loop",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning",
+        "evidence": ".aikit/improvement-record.md cycle 11, scratch/iris-evidence/cycle-11"
+      }
     }
   ]
 }

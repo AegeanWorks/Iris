@@ -276,3 +276,30 @@ Dead ends: none; the cue table and generated-audio promise stay unchanged.
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** The field guide's emitter swatch arrow is small at normal size. The sound toggle only exists on the title and game screens, which is sufficient; no further audio gap was reproduced.
+
+## Cycle 11 — 2026-11-07 — UI readability, pass 4: receiver ring and dot
+
+**Find.** The symbol key explained the receiver as `wants one exact hue`, but the board uses the ring for the target and the center dot for the arriving color. That is the one receiver convention the key did not state. The emitter swatch arrow was also small at normal size, so its direction was hard to read without zooming.
+
+**Analyze.** Survivors:
+1. Rewrite the receiver row to say `ring wants one exact hue; dot shows what arrives`.
+2. Widen the emitter swatch arrow from 4x7 to 5x9 without changing the board emitter.
+3. Keep the key at four rows and inside the dialog at 1440 and 390.
+Dead ends: none; the board glyphs and colors are already the intended ones.
+
+**Implement.** `index.html` updates the receiver label. `src/styles.css` widens `.symbol-arrow`. The UI test asserts both the ring/dot copy and the 5x9 arrow, and the dogfood symbol check now requires `ring wants`.
+
+**Proof.**
+- Help pair, same `?screen=title&preview=howto` state and 1440x900 viewport: `cycle-11/pair-help-1440.png`; zoom `cycle-11/pair-zoom-symbols.png`. Before: `Receiver: wants one exact hue` and a 4x7 arrow; after: the ring/dot explanation and the larger arrow.
+- 390x844 pair, same state: `cycle-11/pair-help-390.png`; the four rows still stack in one column and the dialog scrolls with the new copy.
+- Failing-first: the receiver test failed on `ring wants one exact hue` before the copy changed.
+- The dogfood's symbol text check now includes `ring wants`, and it still finds four rows with no horizontal overflow at 1440 or 320.
+
+**Gates.**
+- `node --test` → 111 pass, 0 fail (was 110).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including the board-symbol and mixing keys, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** A full find pass over the remaining areas found no further defect that can be reproduced and proven at the current scope; the game is at a clean stopping point pending user direction.

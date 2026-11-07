@@ -547,7 +547,8 @@ async function main() {
       throw new Error(`The field guide does not label the mixing equations: ${JSON.stringify(help)}.`);
     }
     if (help.symbols !== 4 ||
-        !["Emitter", "Mirror", "Dye", "Receiver"].every((label) => help.symbolText.includes(label))) {
+        !["Emitter", "Mirror", "Dye", "Receiver"].every((label) => help.symbolText.includes(label)) ||
+        !help.symbolText.includes("ring wants")) {
       throw new Error(`The field guide does not label the board symbols: ${JSON.stringify(help)}.`);
     }
     if (help.overflow) {
