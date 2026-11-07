@@ -8,6 +8,8 @@
 
 A neon color-mixing puzzle: route red, green and blue beams through rotating mirrors and dye cells, blend exact hues, and light every receiver across three episodes.
 
+> **Archived**: Feature-complete after the 12-cycle improvement and verification sweep; retired from active development. (archived 2026-11-08). This project is read-only; its GitHub repository is archived.
+
 ## What it is
 
 Iris is a zero-install browser puzzle about additive light. Each chamber gives you emitters, mirrors and dyes; every receiver wants one exact hue, and a beam that arrives too rich or too poor does not count. Rotate the mirrors, bend the light, and charge all receivers to finish the chamber.
