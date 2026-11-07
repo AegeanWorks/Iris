@@ -1,62 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-02",
+    "task_id": "iris-cycle-03",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794079331.8725886,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794080076.0548291,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794079367.8234277
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Review remediation complete; checklists: passed; 73/73 tests, mechanics gate, level checker, extended browser dogfood and the AegeanWorks Live static-contract validator all pass",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793320178.8581367,
-      "timestamp_str": "2026-10-30 03:29:38",
-      "agent": "kilo:iris",
-      "handoff": {
-        "state": "5 modified and 11 untracked files, .aikit/ui.json must be committed before ui begin/verify/finish",
-        "next": "review the uncommitted diff, commit and publish Iris, then add the Iris APPS entry to AegeanWorks tools/sync_live_apps.py and run its sync (the website replaced the Play catalog with Live apps in commit 2237b17)",
-        "failed": "none",
-        "open": "no commit or push because the host forbids commits not explicitly requested",
-        "evidence": "node --test tests 73 pass, check-levels 12 OK, dogfood OK, sync_live_apps validate_source OK, media blockers none"
-      }
-    },
-    {
-      "task_id": "iris-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793344980.5340652,
-      "timestamp_str": "2026-10-30 10:23:00",
-      "agent": "kilo:iris"
-    },
-    {
-      "task_id": "iris-ci",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/2] Add a GitHub Actions workflow that runs the Node tests, the level-parity checker and the UI inventory on Node 22 and 24, plus the browser dogfood on 22. [2/2] Push and confirm the workflow is green.",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793359085.1319513,
-      "timestamp_str": "2026-10-30 14:18:05",
-      "agent": "kilo:iris",
-      "impact_assessment": {
-        "why": "The game is published and synced by the website, but its own repository had no CI, so a broken engine, level or UI contract could reach master without a failing check.",
-        "benefits": "Every push and pull request now proves the 73 tests, the true-minimum par for all twelve chambers, the UI hook inventory and a real browser solve before the website sync can pick the commit up.",
-        "risks": "contract: the workflow must keep working on a clean runner with no install step; dependency: Node 22/24 and the runner's Chrome; concurrency: the website live workflow checks out the same master; state: none.",
-        "mitigation": "Use only zero-dependency commands already verified locally, let the dogfood skip when no browser exists, run the same steps locally, and watch the first GitHub run before calling it done."
-      }
-    },
     {
       "task_id": "iris-ci",
       "phase": "phase 4",
@@ -306,6 +260,53 @@
       "timestamp": 1794079367.8234296,
       "timestamp_str": "2026-11-07 22:22:47",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-03",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Audio cues: give hints their own cue and add a losing-charge cue, driven by a pure trace-difference helper, proven by new unit tests and a browser audio log during a played Crossroads run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794079548.505262,
+      "timestamp_str": "2026-11-07 22:25:48",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "The hint currently reuses the dye cue and the unused error cue never plays. When a rotation uncharges a receiver the only feedback is visual, and the old count comparison cannot distinguish a receiver that charges from one that loses charge in the same move.",
+        "benefits": "Players hear a distinct hint ping and an audible loss when a route breaks; charge and uncharge are derived from the exact receiver set before and after the move rather than a net count, and the audio module finally has direct tests.",
+        "risks": "contract: PLAYABLE.md still ships no audio files; dependency: none; concurrency: none; state: no progress or save change.",
+        "mitigation": "Keep all cues generated in audio.js, add a one-function feedback module, record oscillator frequencies in the browser dogfood, and run the full campaign plus the existing hint, undo and sound-toggle checks."
+      },
+      "plan_digest": "15ff63fac882b4aae1cfd32baa5abd49d748d06cf2b52b7f3f5c71efa53fd3a3"
+    },
+    {
+      "task_id": "iris-cycle-03",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Added the trace-difference feedback helper, distinct hint and uncharge cues, app wiring and browser oscillator logging, with 11 new audio/feedback tests and a played Crossroads audio run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794080068.3861628,
+      "timestamp_str": "2026-11-07 22:34:28",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-03",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 98/98 node tests, 11 new audio/feedback tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with hint/charge/uncharge/win audio, aikit 5/5 gates; played Crossroads run recorded the oscillator graph for charge, uncharge and win",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794080076.0548291,
+      "timestamp_str": "2026-11-07 22:34:36",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "6 modified and 2 untracked files ready for explicit staging",
+        "next": "commit cycle 3, then start cycle 4 on progression and saves",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, sound-off does not stop scheduled tones, win-dialog narrow-screen focus",
+        "evidence": ".aikit/improvement-record.md cycle 3, scratch/iris-evidence/cycle-03"
+      }
     }
   ]
 }

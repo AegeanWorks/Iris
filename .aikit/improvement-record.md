@@ -2,7 +2,7 @@
 
 Continuous improvement cycles for Iris. One area per cycle. Each entry names the defect evidence, the fix, the screenshot pair and the played run. Screenshot files live outside the repository in `scratch/iris-evidence/cycle-N/` and are not committed; binaries never enter the tree.
 
-Covered areas: UI readability (cycle 1), graphics and effects (cycle 2).
+Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3).
 
 ## Cycle 1 — 2026-11-07 — UI readability: field-guide mixing key
 
@@ -60,3 +60,30 @@ Dead ends: delaying the beam trace until the animation ends would add input late
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** The win dialog still focuses its first button on open, which can scroll its heading out of view at 320x568. Arrow-key focus does not use `preventScroll`, so the page can jump on short screens.
+
+## Cycle 3 — 2026-11-07 — Audio cues: hint ping and lost charge
+
+**Find.** The hint reused the dye cue (`audio.play("dye")` in `showHint`), so a hint and a lit dye cell were indistinguishable. The audio table carried an unused `error` cue and no loss cue at all. The move feedback compared only the net charged count, so a move that charged one receiver while uncharging another could stay silent. There were no audio tests.
+
+**Analyze.** Survivors:
+1. Give the hint a distinct two-note ping (880Hz and 1174.66Hz) so it cannot be confused with the dye cue (523.25Hz/659.25Hz).
+2. Replace the unused error cue with a descending uncharge cue (392Hz to 311.13Hz).
+3. Derive feedback from the exact set of charged receiver cells before and after the move, not the net count.
+Dead ends: playing the old error cue on every wrong-hue receiver would fire on most rotations and become noise.
+
+**Implement.** Added `src/ui/feedback.js` with `feedbackCues(before, after)`, extended `src/ui/audio.js` with `hint` and `uncharge`, changed `showHint()` to play `hint`, and changed `rotateAt()` to play every cue the helper returns. Added `tests/audio.test.js` for the cue frequencies, mute, unknown cue, unlock and the four feedback transitions. Extended the browser dogfood with an oscillator-frequency recorder, a hint-cue check and a played Crossroads run that charges, uncharges and solves.
+
+**Proof.**
+- Failing-first: `node --test tests/audio.test.js` failed with `ERR_MODULE_NOT_FOUND` for the new feedback module and the missing cue assertions before implementation; it now passes 11/11.
+- Played browser run with the audio graph recorded (`scratch/iris-evidence/cycle-03`): Crossroads first rotation `[392, 523.25, 783.99]` (rotate + charge); second rotation `[392, 392, 311.13]` (rotate + uncharge, with the 311.13 loss note); third rotation and solve `[392, 523.25, 783.99, 392, 523.25, 783.99, 523.25, 659.25, 783.99, 1046.5]` (two charges plus the win arpeggio), with the victory dialog open on `2/2`.
+- Hint run: `[880, 1174.66]` with the status line still naming the backslash mirror.
+- The Crossroads victory screenshot `after-audio-crossroads-victory.png` shows the solved board and dialog that accompanied the win cue.
+
+**Gates.**
+- `node --test` → 98 pass, 0 fail (was 87).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including hint/charge/uncharge/win audio, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** Turning sound off during a cue does not stop oscillators that were already scheduled. The next audio pass could also give undo/reset a short cue if they stay silent after this cycle.

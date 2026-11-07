@@ -18,6 +18,7 @@ import {
   levelsForEpisode,
 } from "../game/levels.js";
 import { createAudio } from "./audio.js";
+import { feedbackCues } from "./feedback.js";
 import {
   bestFor,
   isUnlocked,
@@ -565,8 +566,8 @@ function rotateAt(x, y) {
   const after = traceGame(state.game);
   audio.unlock();
   audio.play("rotate");
-  if (after.charged > before.charged) {
-    audio.play("charge");
+  for (const cue of feedbackCues(before, after)) {
+    audio.play(cue);
   }
   if (after.solved) {
     finishLevel({ preview: Boolean(state.preview) });
@@ -650,7 +651,7 @@ function showHint() {
     y: mirror.y,
     orientation: solution[keyOf(mirror.x, mirror.y)],
   };
-  audio.play("dye");
+  audio.play("hint");
   renderGame();
   clearHintTimer();
   state.hintTimer = setTimeout(() => {

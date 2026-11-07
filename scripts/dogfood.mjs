@@ -255,6 +255,32 @@ async function main() {
     connection = await connect(target.webSocketDebuggerUrl);
     await connection.send("Page.enable");
     await connection.send("Runtime.enable");
+    await connection.send("Page.addScriptToEvaluateOnNewDocument", {
+      source: `(() => {
+        const Original = window.AudioContext || window.webkitAudioContext;
+        if (!Original) return;
+        window.__irisAudio = [];
+        function wrapped(context) {
+          const createOscillator = context.createOscillator.bind(context);
+          context.createOscillator = () => {
+            const oscillator = createOscillator();
+            const setValueAtTime = oscillator.frequency.setValueAtTime.bind(oscillator.frequency);
+            oscillator.frequency.setValueAtTime = (value, time) => {
+              window.__irisAudio.push({ type: oscillator.type, frequency: value });
+              return setValueAtTime(value, time);
+            };
+            return oscillator;
+          };
+          return context;
+        }
+        function WrappedAudioContext(...args) {
+          return wrapped(new Original(...args));
+        }
+        WrappedAudioContext.prototype = Original.prototype;
+        window.AudioContext = WrappedAudioContext;
+        window.webkitAudioContext = WrappedAudioContext;
+      })();`,
+    });
     await connection.send("Emulation.setDeviceMetricsOverride", {
       width: 1280,
       height: 860,
@@ -403,6 +429,7 @@ async function main() {
     if (moved.x !== "2" || moved.y !== "4") {
       throw new Error(`Arrow keys did not move to the next mirror: ${JSON.stringify(moved)}.`);
     }
+    await connection.evaluate("window.__irisAudio = []");
     await clickSelector(connection, "#btn-hint");
     const hint = await connection.evaluate(`(() => {
       const ghost = document.querySelector('.hint-ghost');
@@ -423,6 +450,12 @@ async function main() {
     })()`);
     if (hintStyle.transform === "none" || !hintStyle.status.startsWith("Hint:")) {
       throw new Error(`The hint was not drawn or announced: ${JSON.stringify(hintStyle)}.`);
+    }
+    const hintAudio = await connection.evaluate(
+      "window.__irisAudio.map((entry) => entry.frequency)",
+    );
+    if (!hintAudio.includes(880) || !hintAudio.includes(1174.66) || hintAudio.includes(523.25)) {
+      throw new Error(`The hint did not play its own cue: ${JSON.stringify(hintAudio)}.`);
     }
 
     await clickSelector(connection, "#btn-undo");
@@ -466,6 +499,48 @@ async function main() {
     if (!helpClosed) {
       throw new Error("The in-game field guide did not close.");
     }
+
+    await connection.send("Page.navigate", { url: `${url}?level=crossroads` });
+    await wait(600);
+    await waitFor(
+      connection,
+      "Boolean(document.querySelector('.tile-tile[data-x=\"4\"][data-y=\"5\"]'))",
+      "the crossroads board",
+    );
+    await connection.evaluate("window.__irisAudio = []");
+    await clickMirror(connection, 4, 5);
+    const chargeAudio = await connection.evaluate(
+      "window.__irisAudio.map((entry) => entry.frequency)",
+    );
+    if (!chargeAudio.includes(523.25) || !chargeAudio.includes(783.99)) {
+      throw new Error(`A new charge did not play the charge cue: ${JSON.stringify(chargeAudio)}.`);
+    }
+    await connection.evaluate("window.__irisAudio = []");
+    await clickMirror(connection, 4, 5);
+    const unchargeAudio = await connection.evaluate(
+      "window.__irisAudio.map((entry) => entry.frequency)",
+    );
+    if (!unchargeAudio.includes(311.13) || unchargeAudio.includes(783.99)) {
+      throw new Error(`A lost charge did not play the uncharge cue: ${JSON.stringify(unchargeAudio)}.`);
+    }
+    await connection.evaluate("window.__irisAudio = []");
+    await clickMirror(connection, 4, 5);
+    await clickMirror(connection, 3, 1);
+    const winAudio = await connection.evaluate(
+      "window.__irisAudio.map((entry) => entry.frequency)",
+    );
+    if (!winAudio.includes(1046.5)) {
+      throw new Error(`The solved chamber did not play the win cue: ${JSON.stringify(winAudio)}.`);
+    }
+    const crossroads = await connection.evaluate(`(() => ({
+      open: document.getElementById('win-dialog').open,
+      heading: document.getElementById('win-heading').textContent,
+      receivers: document.getElementById('receiver-count').textContent
+    }))()`);
+    if (!crossroads.open || crossroads.heading !== "Crossroads" || crossroads.receivers !== "2/2") {
+      throw new Error(`The crossroads audio run did not solve the chamber: ${JSON.stringify(crossroads)}.`);
+    }
+    await connection.evaluate("document.getElementById('win-dialog').close()");
 
     await clickSelector(connection, "#btn-sound-game");
     const sound = await connection.evaluate(`(() => ({
@@ -567,7 +642,7 @@ async function main() {
     if (narrowHelp.headingTop < narrowHelp.dialogTop - 1 || narrowHelp.overflow) {
       throw new Error(`The field guide is clipped on a narrow screen: ${JSON.stringify(narrowHelp)}.`);
     }
-    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, hint, in-game help, labeled mixing key, preview and responsive board.");
+    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, hint, hint/charge/uncharge/win audio, in-game help, labeled mixing key, preview and responsive board.");
     return 0;
   } catch (error) {
     console.error(`[FAIL] Iris dogfood: ${error.message}`);
