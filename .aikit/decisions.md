@@ -72,5 +72,12 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Date**: 2026-11-07
 - **Status**: Accepted
 - **Context**: The hint reused the dye cue, so the two actions sounded identical, and the unused error cue never played. A rotation that broke an existing route gave no sound at all, and the old check compared only the net charged count, so one receiver charging while another uncharged could produce no cue.
-- **Decision**: Give the hint its own two-note ping, replace the unused error cue with a descending uncharge cue, and derive move feedback in src/ui/feedback.js from the exact set of charged receiver cells before and after the move. The app plays every cue the helper returns, so a simultaneous gain and loss is heard as both.
-- **Consequences**: No audio file, network call, save or level change. 	ests/audio.test.js covers the cue frequencies, mute and unknown-cue paths plus the four feedback transitions, and the browser dogfood records oscillator frequencies for hint, charge, uncharge and win during a real Crossroads run. 98/98 tests and the dogfood are green.
+- **Decision**: Give the hint its own two-note ping, replace the unused error cue with a descending uncharge cue, and derive move feedback in `src/ui/feedback.js` from the exact set of charged receiver cells before and after the move. The app plays every cue the helper returns, so a simultaneous gain and loss is heard as both.
+- **Consequences**: No audio file, network call, save or level change. `tests/audio.test.js` covers the cue frequencies, mute and unknown-cue paths plus the four feedback transitions, and the browser dogfood records oscillator frequencies for hint, charge, uncharge and win during a real Crossroads run. 98/98 tests and the dogfood are green.
+
+### ADR-010: Count progress only for authored campaign chambers
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: `normalizeProgress` keeps any non-empty level id so old records survive level renames, but `solvedCount` and `starCount` counted every stored key. A forged or stale record with two invented ids made the title say `2 of 12 chambers lit · 6/36 stars` and the chamber index say `2 of 12 lit` while every real card showed Unplayed.
+- **Decision**: Require the campaign level list in `solvedCount(progress, levels)` and `starCount(progress, levels)` and count only ids present in that list. The app passes `LEVELS` at both call sites; the stored record is not rewritten, so unknown entries stay inert instead of being destroyed.
+- **Consequences**: No storage-format, level or dependency change. A ghost entry is preserved but never counted; a real solve alongside it still saves and advances the campaign. 100/100 tests, the forged-save screenshot pair and the reload-plus-play run are green.

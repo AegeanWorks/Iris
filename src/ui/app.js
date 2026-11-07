@@ -193,8 +193,8 @@ function starsMarkup(count, label) {
 }
 
 function renderTitleProgress() {
-  const lit = solvedCount(state.progress);
-  const stars = starCount(state.progress);
+  const lit = solvedCount(state.progress, LEVELS);
+  const stars = starCount(state.progress, LEVELS);
   const next = nextUnsolved(state.progress, LEVELS);
   const rank = rankFor(stars, TOTAL_STARS);
   if (lit === 0) {
@@ -271,7 +271,8 @@ function renderChambers() {
     section.append(head, grid);
     refs.chamberList.append(section);
   }
-  refs.chambersProgress.textContent = `${solvedCount(state.progress)} of ${TOTAL_CHAMBERS} lit`;
+  refs.chambersProgress.textContent =
+    `${solvedCount(state.progress, LEVELS)} of ${TOTAL_CHAMBERS} lit`;
 }
 
 function showTitle() {

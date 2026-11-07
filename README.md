@@ -17,7 +17,7 @@ Iris is a zero-install browser puzzle about additive light. Each chamber gives y
 - **Hints that cost nothing but time**: a dashed mirror shows one correct orientation for five seconds; the move still has to be made.
 - **Help in play**: reopen the field guide from the game controls without losing your route; a labeled mixing key spells out every hue.
 - **Keyboard and touch parity**: click or tap a mirror, or move with the arrow keys and rotate with Enter or Space.
-- **Versioned local progress**: stars, best moves and the sound preference live in `localStorage` under `iris.progress.v1`; a corrupt or future record resets instead of breaking.
+- **Versioned local progress**: stars, best moves and the sound preference live in `localStorage` under `iris.progress.v1`; a corrupt or future record resets instead of breaking, and only the twelve authored chambers count toward lit progress.
 - **Generated audio only**: rotation, charge, lost charge, hint and victory cues are synthesized with the Web Audio API; the repository ships no audio files and makes no network call.
 
 ## ⚡ 30-Second Cold-Start Quick Reference
@@ -61,7 +61,7 @@ Mirrors turn through a short quarter-circle when rotated. The drawn slash always
 ## Verification
 
 ```bash
-node --test                       # 98 engine, level, progress, server, audio and UI contract tests
+node --test                       # 100 engine, level, progress, server, audio and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook
@@ -84,6 +84,7 @@ iris/
 │   └── ui/
 │       ├── app.js          <- screens, board rendering, input, dialogs
 │       ├── audio.js        <- generated Web Audio cues
+│       ├── feedback.js     <- charge and lost-charge cue selection
 │       └── progress.js     <- versioned localStorage record
 ├── assets/                 <- favicon, logo and social preview; no audio files
 ├── package.json            <- name, version, test and tooling scripts

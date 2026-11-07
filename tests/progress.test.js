@@ -113,12 +113,12 @@ test("a clearer run wins a star tie", () => {
 
 test("recordSolve ignores an empty level id", () => {
   const progress = recordSolve(defaultProgress(), "", { moves: 1, stars: 3 });
-  assert.equal(solvedCount(progress), 0);
+  assert.equal(solvedCount(progress, LEVELS), 0);
 });
 
 test("recordSolve ignores a result without a move count", () => {
   const progress = recordSolve(defaultProgress(), "first-light", { stars: 3 });
-  assert.equal(solvedCount(progress), 0);
+  assert.equal(solvedCount(progress, LEVELS), 0);
   const later = recordSolve(progress, "first-light", { moves: 1, stars: 3 });
   assert.equal(later.solved["first-light"].bestMoves, 1);
 });
@@ -145,10 +145,30 @@ test("a solved chamber stays open without its predecessor", () => {
 test("solvedCount and starCount summarize the record", () => {
   let progress = recordSolve(defaultProgress(), "first-light", { moves: 1, stars: 3 });
   progress = recordSolve(progress, "double-bend", { moves: 3, stars: 2 });
-  assert.equal(solvedCount(progress), 2);
-  assert.equal(starCount(progress), 5);
+  assert.equal(solvedCount(progress, LEVELS), 2);
+  assert.equal(starCount(progress, LEVELS), 5);
   assert.equal(bestFor(progress, "first-light").stars, 3);
   assert.equal(bestFor(progress, "missing"), null);
+});
+
+test("progress summaries ignore chambers outside the campaign", () => {
+  const forged = normalizeProgress({
+    version: PROGRESS_VERSION,
+    solved: {
+      "first-light": { bestMoves: 1, stars: 3 },
+      ghost: { bestMoves: 1, stars: 3 },
+      phantom: { bestMoves: 2, stars: 2 },
+    },
+    settings: { sound: true },
+    lastLevel: "ghost",
+  });
+  assert.equal(solvedCount(forged, LEVELS), 1);
+  assert.equal(starCount(forged, LEVELS), 3);
+});
+
+test("progress summaries require a campaign list", () => {
+  assert.throws(() => solvedCount(defaultProgress()), /campaign/i);
+  assert.throws(() => starCount(defaultProgress()), /campaign/i);
 });
 
 test("nextUnsolved follows the campaign order", () => {

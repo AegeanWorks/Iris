@@ -1,62 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-03",
+    "task_id": "iris-cycle-04",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794080076.0548291,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794080744.8919563,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794080099.8784175
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-ci",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "CI exposed a real compatibility bug: node --test with a directory fails on Node 22 and 24; the suite now uses auto-discovery and passes on Node 20, 22, 24 and 26; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793360011.3165622,
-      "timestamp_str": "2026-10-30 14:33:31",
-      "agent": "kilo:iris",
-      "handoff": {
-        "state": "7 modified files",
-        "next": "commit and push, then watch the tests workflow",
-        "failed": "none",
-        "open": "none",
-        "evidence": "73/73 on Node 22, 24 and 26 plus Node 20, 5/5 gates"
-      }
-    },
-    {
-      "task_id": "iris-ci",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-ci' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793360192.587831,
-      "timestamp_str": "2026-10-30 14:36:32",
-      "agent": "kilo:iris"
-    },
-    {
-      "task_id": "iris-ci-node20",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/1] Add Node 20, the declared engines floor, to the CI matrix and verify the suite and level checker there.",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793363154.8286858,
-      "timestamp_str": "2026-10-30 15:25:54",
-      "agent": "kilo:iris",
-      "impact_assessment": {
-        "why": "package.json promises Node 20 or newer, but CI only proved 22 and 24; a regression on the oldest supported runtime could reach master.",
-        "benefits": "The matrix now tests every declared major from the floor upward, so the README prerequisite and the actual CI agree.",
-        "risks": "contract: one matrix line; dependency: GitHub's Node 20 action support; concurrency: none; state: none.",
-        "mitigation": "Run the suite and the level checker under Node 20 locally, then let CI prove the matrix and keep the browser dogfood on Node 22."
-      }
-    },
     {
       "task_id": "iris-ci-node20",
       "phase": "phase 4",
@@ -300,6 +254,53 @@
       "timestamp": 1794080099.878419,
       "timestamp_str": "2026-11-07 22:34:59",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-04",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Progression and saves: count title and chamber progress only for real campaign chambers, so a forged or stale save with ghost ids cannot inflate lit chambers or stars, proven by a forged-save screenshot pair and a reload run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794080173.5566533,
+      "timestamp_str": "2026-11-07 22:36:13",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "normalizeProgress keeps any non-empty level id, and solvedCount/starCount count every stored key. A save containing ghost ids shows lit chambers and stars for chambers that do not exist, while the chamber grid shows none, so the title and index disagree.",
+        "benefits": "The title, rank and chamber index summarize only the 12 authored chambers; older or hand-edited saves keep their real entries and ignore invented ones; the fix is a two-function signature change with no storage-format change.",
+        "risks": "contract: progress keys stay under iris.progress.v1; dependency: none; concurrency: none; state: read-only filtering, no record rewrite.",
+        "mitigation": "Add failing progress tests for a ghost entry and a missing campaign list, pass LEVELS from the two app call sites, and verify the title and chambers screen from the same forged localStorage record before and after."
+      },
+      "plan_digest": "6aacd7961f2ce4796f2eb13326ac9d99f6ecbce55e629aa06da54bbf3bd33b4d"
+    },
+    {
+      "task_id": "iris-cycle-04",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Filtered solvedCount and starCount to authored campaign ids, required the level list at both call sites, added ghost-save failing-first tests, and captured forged-save before/after title and chamber pairs plus a ghost-save play run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794080733.6767998,
+      "timestamp_str": "2026-11-07 22:45:33",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-04",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 100/100 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; forged-save pairs show title 2-of-12 to 12-chambers and chambers 2-of-12 to 0-of-12, and the ghost-save play run reports 1 of 12 after a real solve",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794080744.8919563,
+      "timestamp_str": "2026-11-07 22:45:44",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "6 modified files ready for explicit staging",
+        "next": "commit cycle 4, then start cycle 5 on levels or the next progression opportunity",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
+        "evidence": ".aikit/improvement-record.md cycle 4, scratch/iris-evidence/cycle-04"
+      }
     }
   ]
 }

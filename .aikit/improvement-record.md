@@ -2,7 +2,7 @@
 
 Continuous improvement cycles for Iris. One area per cycle. Each entry names the defect evidence, the fix, the screenshot pair and the played run. Screenshot files live outside the repository in `scratch/iris-evidence/cycle-N/` and are not committed; binaries never enter the tree.
 
-Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3).
+Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3), progression and saves (cycle 4).
 
 ## Cycle 1 — 2026-11-07 — UI readability: field-guide mixing key
 
@@ -87,3 +87,29 @@ Dead ends: playing the old error cue on every wrong-hue receiver would fire on m
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** Turning sound off during a cue does not stop oscillators that were already scheduled. The next audio pass could also give undo/reset a short cue if they stay silent after this cycle.
+
+## Cycle 4 — 2026-11-07 — Progression and saves: ignore invented chambers
+
+**Find.** A forged or stale save with two invented chamber ids made the title say `2 of 12 chambers lit · 6/36 stars · Novice · next: First Light` and the chamber index say `2 of 12 lit`, while every real card showed Unplayed and `data-solved` was true on zero cards (`cycle-04/pair-ghost-title-1440.png`, `cycle-04/pair-ghost-chambers-1440.png`). `normalizeProgress` intentionally keeps unknown ids so old records survive edits, but `solvedCount` and `starCount` counted every key.
+
+**Analyze.** Survivors:
+1. Filter the summary counts to ids present in the authored campaign, leaving the stored record untouched so old ids are not destroyed.
+2. Require the campaign list at both summary call sites so a future caller cannot silently reintroduce the overcount.
+Dead ends: dropping unknown ids during normalization would rewrite hand-edited or renamed saves and destroy data.
+
+**Implement.** `src/ui/progress.js` now requires `levels` in `solvedCount(progress, levels)` and `starCount(progress, levels)` and counts only known ids; `src/ui/app.js` passes `LEVELS` in `renderTitleProgress()` and `renderChambers()`. New failing-first tests cover a ghost entry, a real entry plus ghosts, and a missing campaign list.
+
+**Proof.**
+- Title pair, same forged `iris.progress.v1` record and 1440x900 viewport: `cycle-04/pair-ghost-title-1440.png`. Before: `2 of 12 chambers lit · 6/36 stars · Novice · next: First Light`. After: `12 chambers · no account · no network`.
+- Chamber pair, same record: `cycle-04/pair-ghost-chambers-1440.png`. Before: `2 of 12 lit`; after: `0 of 12 lit`; zero lit cards in both.
+- Played run: with a ghost entry present, Play opened First Light, one rotation solved it, the saved record kept the ghost entry and added `first-light`, and the title reported `1 of 12 chambers lit · 3/36 stars · Novice · next: Double Bend` with the chamber index at `1 of 12 lit` and one lit card (`cycle-04/play/after-ghost-play-chambers.png`).
+- Failing-first: the two new tests reported `3 !== 1` and `Missing expected exception` before the fix.
+
+**Gates.**
+- `node --test` → 100 pass, 0 fail (was 98).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including all audio checks, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** The win dialog still opens on its first button, which can scroll its heading out of view at 320x568. Episode and campaign completion still use the same ordinary victory dialog; that is the next progression opportunity.

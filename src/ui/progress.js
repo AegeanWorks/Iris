@@ -159,15 +159,31 @@ export function isUnlocked(progress, levels, levelId) {
   return Boolean(current.solved[levelId] ?? current.solved[levels[index - 1].id]);
 }
 
-export function solvedCount(progress) {
-  return Object.keys(normalizeProgress(progress).solved).length;
+function campaignIds(levels) {
+  if (!Array.isArray(levels)) {
+    throw new TypeError("A campaign level list is required to count progress.");
+  }
+  const ids = new Set();
+  for (const level of levels) {
+    if (level && typeof level.id === "string" && level.id.length > 0) {
+      ids.add(level.id);
+    }
+  }
+  return ids;
 }
 
-export function starCount(progress) {
-  return Object.values(normalizeProgress(progress).solved).reduce(
-    (total, entry) => total + entry.stars,
-    0,
-  );
+export function solvedCount(progress, levels) {
+  const ids = campaignIds(levels);
+  return Object.keys(normalizeProgress(progress).solved)
+    .filter((levelId) => ids.has(levelId))
+    .length;
+}
+
+export function starCount(progress, levels) {
+  const ids = campaignIds(levels);
+  return Object.entries(normalizeProgress(progress).solved)
+    .filter(([levelId]) => ids.has(levelId))
+    .reduce((total, [, entry]) => total + entry.stars, 0);
 }
 
 export function bestFor(progress, levelId) {
