@@ -84,6 +84,12 @@ test("every stored solution is itself a minimum route", () => {
   }
 });
 
+test("The Vault uses the wall tile", () => {
+  const vault = LEVEL_BY_ID["the-vault"];
+  const walls = vault.rows.join("").split("#").length - 1;
+  assert.ok(walls >= 4, `The Vault has ${walls} wall tiles`);
+});
+
 test("chambers carry a name, id and episode in range", () => {
   for (const level of LEVELS) {
     assert.ok(level.name.length > 0);

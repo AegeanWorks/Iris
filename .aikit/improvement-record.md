@@ -2,7 +2,7 @@
 
 Continuous improvement cycles for Iris. One area per cycle. Each entry names the defect evidence, the fix, the screenshot pair and the played run. Screenshot files live outside the repository in `scratch/iris-evidence/cycle-N/` and are not committed; binaries never enter the tree.
 
-Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3), progression and saves (cycle 4).
+Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3), progression and saves (cycle 4), levels (cycle 5).
 
 ## Cycle 1 — 2026-11-07 — UI readability: field-guide mixing key
 
@@ -113,3 +113,30 @@ Dead ends: dropping unknown ids during normalization would rewrite hand-edited o
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** The win dialog still opens on its first button, which can scroll its heading out of view at 320x568. Episode and campaign completion still use the same ordinary victory dialog; that is the next progression opportunity.
+
+## Cycle 5 — 2026-11-07 — Levels: frame The Vault with walls
+
+**Find.** The engine validates, renders and tests `#` walls, but no authored chamber used one: `document.querySelectorAll('.tile[data-kind=wall]').length` was 0 on The Vault (`cycle-05/before-vault-1440.png`). The Episode I finale was an empty 7x7 frame with four floating mirrors, and neither the field guide nor the README symbol table explained walls.
+
+**Analyze.** Survivors:
+1. Add two symmetric 2x2 wall blocks to The Vault on cells outside the unique red and green solution paths.
+2. Keep the stored four-move solution and par 4; verify the solver still reports a unique minimum route.
+3. Teach the tile: one wall row in the README table and `Walls stop a beam` in the field guide.
+Dead ends: candidate layouts with walls at `5,3` or `5,5` blocked the red route and returned `par=null`; discarded before any code was written.
+
+**Implement.** `src/game/levels.js` now has `##` blocks at rows 1-2 columns 4-5 and rows 4-5 columns 0-1. `README.md` gained the wall symbol row and `index.html` gained the wall rule. Failing-first tests assert that The Vault has at least four wall tiles and that the field guide says `Walls stop a beam`.
+
+**Proof.**
+- Board pair, same `?level=the-vault` zero-move state and 1440x900 viewport: `cycle-05/pair-vault-1440.png`. Before: 0 walls, empty frame. After: 8 walls in two blocks, same beams, same par 4 and 0/2 receivers.
+- Solver: `check-levels` reports `the-vault mirrors=4 par=4 solver=4 stored=4 wins=true`; a 16-state enumeration still finds exactly one solving state, the stored four-move route.
+- Played run: four rotations in the live UI solved the chamber in 4 moves with `2/2` receivers and three stars (`cycle-05/play/after-vault-victory.png`), with 8 wall tiles rendered.
+- Failing-first: `The Vault has 0 wall tiles` and the missing `Walls stop a beam` assertion both failed before the change.
+
+**Gates.**
+- `node --test` → 102 pass, 0 fail (was 100).
+- `node scripts/check-levels.mjs` → all 12 chambers OK, The Vault par and solution unchanged.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including audio and help checks, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** The win dialog still opens on its first button, which can scroll its heading out of view at 320x568. Episode and campaign completion still use the same ordinary victory dialog.

@@ -127,6 +127,13 @@ test("the field guide explains color mixing in words", () => {
   }
 });
 
+test("the field guide explains that walls stop light", () => {
+  const start = html.indexOf('id="help-dialog"');
+  const end = html.indexOf("</dialog>", start);
+  const help = html.slice(start, end);
+  assert.match(help, /Walls stop a beam/);
+});
+
 test("the field guide opens at its heading", () => {
   assert.match(html, /id="help-heading" tabindex="-1"/);
   assert.match(app, /helpHeading: required\("help-heading"\)/);

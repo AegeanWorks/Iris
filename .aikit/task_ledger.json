@@ -2,44 +2,15 @@
   "version": 1,
   "active_task": {
     "task_id": "iris-cycle-05",
-    "last_phase": "resumed",
-    "active_phase": 2,
+    "last_phase": "verification",
+    "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1794081014.9591904,
+    "updated_at": 1794081246.1931038,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-01",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Replaced the 13 unlabeled help discs with four labeled mixing equations, added the 320px layout and help-heading focus fixes, and captured 1440/390/320 before-after pairs plus a full 12-chamber scripted playthrough",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794077304.0767195,
-      "timestamp_str": "2026-11-07 21:48:24",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-01",
-      "phase": "verification",
-      "phase_num": 4,
-      "description": "[4/4] Verification complete; checklists: passed; 86/86 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; screenshot pairs at 1440, 390 and 320 plus a 12/12 full-campaign playthrough recorded",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794077321.765444,
-      "timestamp_str": "2026-11-07 21:48:41",
-      "agent": "opencode:iris-cycle",
-      "handoff": {
-        "state": "7 modified and 1 untracked file ready for explicit staging",
-        "next": "commit cycle 1, then start cycle 2 on the next area",
-        "failed": "none",
-        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus deferred to a later UI pass",
-        "evidence": ".aikit/improvement-record.md cycle 1, scratch/iris-evidence/cycle-01"
-      }
-    },
     {
       "task_id": "iris-cycle-01",
       "phase": "completed",
@@ -280,6 +251,35 @@
       "timestamp": 1794081014.9591904,
       "timestamp_str": "2026-11-07 22:50:14",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-05",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Added the two wall blocks to The Vault, the README wall row and the field-guide wall rule, with failing-first level and help tests and a four-move played run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081233.458567,
+      "timestamp_str": "2026-11-07 22:53:53",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-05",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 102/102 node tests, check-levels shows The Vault par 4 with a unique four-move route, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; same-state before/after board pair and a four-move victory run recorded",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081246.1931038,
+      "timestamp_str": "2026-11-07 22:54:06",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "7 modified files ready for explicit staging",
+        "next": "commit cycle 5, then start cycle 6 on combat feel or the deferred win-dialog focus",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
+        "evidence": ".aikit/improvement-record.md cycle 5, scratch/iris-evidence/cycle-05"
+      }
     }
   ]
 }

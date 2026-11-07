@@ -51,6 +51,7 @@ Deep links used by the website and by reviewers:
 |---|---|
 | Circle with an arrow | Emitter: a fixed color and direction |
 | Slanted line | Mirror: rotates a quarter turn per click |
+| Crosshatched block | Wall: stops a beam |
 | Ringed circle | Dye cell: adds its primary color to the beam |
 | Double ring | Receiver: charged only by its exact target hue |
 
@@ -61,7 +62,7 @@ Mirrors turn through a short quarter-circle when rotated. The drawn slash always
 ## Verification
 
 ```bash
-node --test                       # 100 engine, level, progress, server, audio and UI contract tests
+node --test                       # 102 engine, level, progress, server, audio and UI contract tests
 node scripts/check-levels.mjs     # every chamber's par equals the solver minimum
 node scripts/dogfood.mjs          # headless Edge/Chrome: campaign start, solve, focus, arrows, hint, preview, responsive board
 node scripts/ui-inventory.mjs     # every data-ui, data-panel and data-cue hook

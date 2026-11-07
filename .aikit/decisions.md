@@ -81,3 +81,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: `normalizeProgress` keeps any non-empty level id so old records survive level renames, but `solvedCount` and `starCount` counted every stored key. A forged or stale record with two invented ids made the title say `2 of 12 chambers lit · 6/36 stars` and the chamber index say `2 of 12 lit` while every real card showed Unplayed.
 - **Decision**: Require the campaign level list in `solvedCount(progress, levels)` and `starCount(progress, levels)` and count only ids present in that list. The app passes `LEVELS` at both call sites; the stored record is not rewritten, so unknown entries stay inert instead of being destroyed.
 - **Consequences**: No storage-format, level or dependency change. A ghost entry is preserved but never counted; a real solve alongside it still saves and advances the campaign. 100/100 tests, the forged-save screenshot pair and the reload-plus-play run are green.
+
+### ADR-011: Frame The Vault with two wall blocks and teach the wall tile
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The engine validates, renders and unit-tests walls, but no authored chamber used a `#` tile. The Vault, the Episode I finale, was an empty 7x7 frame with four floating mirrors and no structure, and the field guide and symbol table never explained walls.
+- **Decision**: Add two symmetric 2x2 wall blocks to The Vault at rows 1-2, columns 4-5 and rows 4-5, columns 0-1. Both lie outside the unique red and green solution paths, so the stored four-move route and par 4 stay unchanged. Add a wall row to the README symbol table and `Walls stop a beam` to the field guide.
+- **Consequences**: The wall renderer is exercised in a real chamber and the finale reads as an alcoved vault; no save, dependency or solver behavior changes. The solver still reports a unique four-move solution, 102/102 tests are green, and a played run solves the chamber in four moves for three stars.
