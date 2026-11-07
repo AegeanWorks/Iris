@@ -378,3 +378,9 @@ Fix: `resetLevel` captures whether the reset is undoable (not a Replay after a w
 Range `bfc09a4..c15ab40` (mute cancellation and the receiver glyph key). Re-ran the mute-during-cue browser log: one scheduled stop at `0.07` plus one immediate `when: null` stop on the same voice, `aria-pressed false` and `sound:false` stored. The receiver key still has four rows, the ring/dot copy and no horizontal overflow at 1440 or 320.
 
 No new bug, gap or improvement candidate survived. Gates stayed green at 114/114 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5. Push is a no-op after the 1→18 wave.
+
+## Verification wave 1→End — clean
+
+Range `e3249c6..67b1df0` (32 commits: the 23 original improvement commits plus the audio-exit, sticky-footer and reset-status wave fixes). Final scripted campaign replay: all 12 chambers lit, 36/36 stars, every victory saved (`final-campaign-2/`). Full gates green: 114/114 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5.
+
+No new bug, gap or improvement candidate survived the full range. Pushed in the 1→End wave.
