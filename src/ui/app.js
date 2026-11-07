@@ -62,6 +62,7 @@ const refs = {
   chambersProgress: required("chambers-progress"),
   chamberList: required("chamber-list"),
   helpDialog: required("help-dialog"),
+  helpHeading: required("help-heading"),
   winDialog: required("win-dialog"),
   winKicker: required("win-kicker"),
   winHeading: required("win-heading"),
@@ -687,6 +688,8 @@ function moveFocus(x, y, delta) {
 function openHelp() {
   refs.btnHelpClose.textContent = state.screen === "game" ? "Back to the board" : "Begin";
   refs.helpDialog.showModal();
+  refs.helpHeading.focus();
+  refs.helpDialog.scrollTop = 0;
 }
 
 function wireEvents() {

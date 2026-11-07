@@ -1,15 +1,14 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-help",
-    "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793372443.7545543,
-    "owner": "kilo:iris",
-    "started_by": "kilo:iris",
-    "continuations": [],
-    "completed_at": 1793372652.3372877
+    "task_id": "iris-cycle-01",
+    "last_phase": "verification",
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794077321.765444,
+    "owner": "opencode:iris-cycle",
+    "started_by": "opencode:iris-cycle",
+    "continuations": []
   },
   "checkpoints": [
     {
@@ -256,6 +255,53 @@
       "timestamp": 1793372652.3372889,
       "timestamp_str": "2026-10-30 18:04:12",
       "agent": "kilo:iris"
+    },
+    {
+      "task_id": "iris-cycle-01",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] UI readability: replace the field guide's 13 unlabeled color dots with labeled mixing equations, proven by a same-viewport screenshot pair and a scripted help-dialog run",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794075700.8759897,
+      "timestamp_str": "2026-11-07 21:21:40",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "The field guide's mixing row renders 13 color discs with no text, labels, plus signs or equals signs; textContent is empty and the row is aria-hidden, so a first-time player gets no usable mixing reference from the help they just opened.",
+        "benefits": "The help dialog teaches red+green=yellow, green+blue=cyan, red+blue=magenta and all three=white in readable text, matching the in-game legend; the fix is static HTML/CSS with no runtime or dependency change.",
+        "risks": "contract: PLAYABLE.md static asset and relative URL rules; dependency: none; concurrency: none; state: no progress or save format change.",
+        "mitigation": "Keep the markup inside index.html with existing color tokens, add a failing UI test before the change, extend dogfood to assert the visible equation labels, and run the canonical node --test plus aikit check iris."
+      },
+      "plan_digest": "3c71feca3221c42ca3197343f103a4829afd44d1dcd27b37c41d986946ff7f90"
+    },
+    {
+      "task_id": "iris-cycle-01",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Replaced the 13 unlabeled help discs with four labeled mixing equations, added the 320px layout and help-heading focus fixes, and captured 1440/390/320 before-after pairs plus a full 12-chamber scripted playthrough",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794077304.0767195,
+      "timestamp_str": "2026-11-07 21:48:24",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-01",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 86/86 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK, aikit 5/5 gates; screenshot pairs at 1440, 390 and 320 plus a 12/12 full-campaign playthrough recorded",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794077321.765444,
+      "timestamp_str": "2026-11-07 21:48:41",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "7 modified and 1 untracked file ready for explicit staging",
+        "next": "commit cycle 1, then start cycle 2 on the next area",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus deferred to a later UI pass",
+        "evidence": ".aikit/improvement-record.md cycle 1, scratch/iris-evidence/cycle-01"
+      }
     }
   ]
 }

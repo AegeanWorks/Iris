@@ -53,3 +53,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Six-module swarm audit (engine, levels/solver, UI, progress/audio, server/tooling, styles/assets) returned reproduced defects: shallow-frozen levels, createGame tile bypass, solver null/limit handling, negative-star rating, save-without-store true, __proto__ map loss, 403/404 missing safe headers, hint-timer leak across screens, preview leak on dialog cancel, grid fallback mismatch, dead theme tokens, commercial license misnaming.
 - **Decision**: Always validate in createGame, deep-freeze prepared levels, validate solver options and solutionMoves, return truncated flag, guard rating/save/proto, send safe headers on errors, clear hint timers on screen leave, clear preview on win cancel, fix grid fallback, drop dead tokens, correct AGL-1.1 naming, with failing-first tests for each.
 - **Consequences**: No format or contract change; stricter fail-fast behavior, 84/84 tests green, check-levels and inventory green, aikit 5/5 green.
+
+### ADR-007: Spell out the field-guide mixing key and open it at the heading
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The field guide's decorative row of 13 unlabeled color discs had empty text content, so the help dialog never taught the mixing rules it was meant to. On a 320x568 viewport the modal also focused its bottom button, scrolling the title and first rules out of view and overflowing horizontally.
+- **Decision**: Replace the decorative row with a four-line labeled key (red + green = yellow, green + blue = cyan, red + blue = magenta, red + green + blue = white) that uses the existing beam tokens, collapses the key to one column, and focuses the help heading when the dialog opens. Keep all labels in the static HTML; add a UI contract test and a dogfood check for the labels, narrow-screen overflow and opening scroll position.
+- **Consequences**: No runtime dependency, save format or level change. The field guide is readable and screen-reader meaningful at 1440, 390 and 320 wide; the help dialog opens at its heading instead of the Begin button. 86/86 tests and the browser dogfood are green.

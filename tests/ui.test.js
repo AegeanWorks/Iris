@@ -115,6 +115,27 @@ test("the UI attribute sets match between the shell and the app", () => {
   assert.deepEqual([...attributes("cue")], ["status"]);
 });
 
+test("the field guide explains color mixing in words", () => {
+  const start = html.indexOf('id="help-dialog"');
+  const end = html.indexOf("</dialog>", start);
+  const help = html.slice(start, end);
+  assert.doesNotMatch(help, /class="mix-row"/);
+  assert.match(help, /class="mix-key"/);
+  assert.equal((help.match(/class="mix-line"/g) ?? []).length, 4);
+  for (const label of ["red", "green", "blue", "yellow", "cyan", "magenta", "white"]) {
+    assert.match(help, new RegExp(`>${label}<`), `missing the ${label} label`);
+  }
+});
+
+test("the field guide opens at its heading", () => {
+  assert.match(html, /id="help-heading" tabindex="-1"/);
+  assert.match(app, /helpHeading: required\("help-heading"\)/);
+  assert.match(
+    app,
+    /refs\.helpDialog\.showModal\(\);\s*refs\.helpHeading\.focus\(\);\s*refs\.helpDialog\.scrollTop = 0;/,
+  );
+});
+
 test("the page is a self-contained static document", () => {
   assert.match(html, /<script type="module" src="\.\/src\/ui\/app\.js"><\/script>/);
   assert.match(html, /href="\.\/src\/theme\.css"/);

@@ -370,12 +370,29 @@ async function main() {
     }
 
     await clickSelector(connection, "#btn-help-game");
-    const help = await connection.evaluate(`(() => ({
-      open: document.getElementById('help-dialog').open,
-      label: document.getElementById('btn-help-close').textContent
-    }))()`);
+    const help = await connection.evaluate(`(() => {
+      const key = document.querySelector('#help-dialog .mix-key');
+      const dialog = document.getElementById('help-dialog').getBoundingClientRect();
+      const lines = key ? [...key.querySelectorAll('.mix-line')] : [];
+      return {
+        open: document.getElementById('help-dialog').open,
+        label: document.getElementById('btn-help-close').textContent,
+        equations: lines.length,
+        text: key ? key.textContent.replace(/\\s+/g, ' ').trim() : '',
+        overflow: lines.some((line) => {
+          const rect = line.getBoundingClientRect();
+          return rect.left < dialog.left || rect.right > dialog.right;
+        })
+      };
+    })()`);
     if (!help.open || help.label !== "Back to the board") {
       throw new Error(`The in-game field guide did not open: ${JSON.stringify(help)}.`);
+    }
+    if (help.equations !== 4 || !help.text.includes("magenta") || !help.text.includes("white")) {
+      throw new Error(`The field guide does not label the mixing equations: ${JSON.stringify(help)}.`);
+    }
+    if (help.overflow) {
+      throw new Error(`A field-guide mixing equation overflows the dialog: ${JSON.stringify(help)}.`);
     }
     await clickSelector(connection, "#btn-help-close");
     const helpClosed = await connection.evaluate(
@@ -454,7 +471,38 @@ async function main() {
     if (Math.abs(square.width - square.height) > 2) {
       throw new Error(`The board is not square at 800x600: ${JSON.stringify(square)}.`);
     }
-    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, hint, in-game help, preview and responsive board.");
+
+    await connection.send("Emulation.setDeviceMetricsOverride", {
+      width: 320,
+      height: 568,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    await connection.send("Page.navigate", { url: `${url}?screen=title&preview=howto` });
+    await wait(800);
+    const narrowHelp = await connection.evaluate(`(() => {
+      const dialog = document.getElementById('help-dialog');
+      const bounds = dialog.getBoundingClientRect();
+      const heading = document.getElementById('help-heading').getBoundingClientRect();
+      return {
+        open: dialog.open,
+        active: document.activeElement && document.activeElement.id,
+        scrollTop: dialog.scrollTop,
+        headingTop: heading.top,
+        dialogTop: bounds.top,
+        overflow: [...dialog.querySelectorAll('.mix-line')].some((line) => {
+          const rect = line.getBoundingClientRect();
+          return rect.left < bounds.left || rect.right > bounds.right;
+        })
+      };
+    })()`);
+    if (!narrowHelp.open || narrowHelp.active !== "help-heading" || narrowHelp.scrollTop !== 0) {
+      throw new Error(`The field guide did not open at its heading on a narrow screen: ${JSON.stringify(narrowHelp)}.`);
+    }
+    if (narrowHelp.headingTop < narrowHelp.dialogTop - 1 || narrowHelp.overflow) {
+      throw new Error(`The field guide is clipped on a narrow screen: ${JSON.stringify(narrowHelp)}.`);
+    }
+    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, hint, in-game help, labeled mixing key, preview and responsive board.");
     return 0;
   } catch (error) {
     console.error(`[FAIL] Iris dogfood: ${error.message}`);
