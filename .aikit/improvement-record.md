@@ -2,7 +2,7 @@
 
 Continuous improvement cycles for Iris. One area per cycle. Each entry names the defect evidence, the fix, the screenshot pair and the played run. Screenshot files live outside the repository in `scratch/iris-evidence/cycle-N/` and are not committed; binaries never enter the tree.
 
-Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3), progression and saves (cycle 4), levels (cycle 5).
+Covered areas: UI readability (cycle 1), graphics and effects (cycle 2), audio cues (cycle 3), progression and saves (cycle 4), levels (cycle 5), input feel (cycle 6).
 
 ## Cycle 1 — 2026-11-07 — UI readability: field-guide mixing key
 
@@ -137,6 +137,33 @@ Dead ends: candidate layouts with walls at `5,3` or `5,5` blocked the red route 
 - `node scripts/check-levels.mjs` → all 12 chambers OK, The Vault par and solution unchanged.
 - `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
 - `node scripts/dogfood.mjs` → `[OK]` including audio and help checks, exit 0.
+- `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
+
+**Next findings.** The win dialog still opens on its first button, which can scroll its heading out of view at 320x568. Episode and campaign completion still use the same ordinary victory dialog.
+
+## Cycle 6 — 2026-11-07 — Input feel: Z/R/H shortcuts
+
+**Find.** The board supported arrow keys and Enter/Space, but undo, reset and hint required a pointer. A keyboard-only run pressed `Z` after a rotation and the move count stayed at 1, so the dogfood reported `Z did not undo the last rotation`. The field guide listed rotation and movement keys but no recovery keys.
+
+**Analyze.** Survivors:
+1. Bind `Z`, `R` and `H` to undo, reset and hint from a document-level keydown handler.
+2. Ignore modified chords, text inputs, open dialogs, non-game screens and a won board.
+3. Make the bindings discoverable with `aria-keyshortcuts` and a field-guide rule.
+Dead ends: binding `Ctrl+Z` would collide with browser undo; plain letters avoid that and the game has no text inputs.
+
+**Implement.** `src/ui/app.js` adds `shortcutsEnabled()` and `handleShortcut()` and registers the document listener in `wireEvents()`. `index.html` adds `aria-keyshortcuts="Z"`, `"R"` and `"H"` to the three buttons and the `Shortcuts: Z undo, R reset, H hint` rule. `scripts/dogfood.mjs` now presses all three keys in the Double Bend flow and checks moves, orientation and the hint ghost.
+
+**Proof.**
+- Failing-first browser run: `Z did not undo the last rotation: {"moves":"1","orientation":"\\"}` before the handler existed; the same run now passes with `moves 0` and `/`.
+- Keyboard run after the fix: rotate once (`1` move, `\`), press `Z` → `0` moves and `/`; press `H` → hint ghost present; press `R` → `0` moves, `/`, hint gone.
+- Help pair, same `?screen=title&preview=howto` state and 1440x900 viewport: `cycle-06/pair-help-1440.png`; zoom `cycle-06/pair-zoom-help.png` shows the new `Shortcuts: Z undo, R reset, H hint.` line.
+- `aria-keyshortcuts` measured as `Z`, `R`, `H` after the change and `null` before.
+
+**Gates.**
+- `node --test` → 103 pass, 0 fail (was 102).
+- `node scripts/check-levels.mjs` → all 12 chambers OK.
+- `node scripts/ui-inventory.mjs` → 19 entries, unchanged.
+- `node scripts/dogfood.mjs` → `[OK]` including the Z/R/H shortcut checks, exit 0.
 - `python aikit.py check iris` → 5/5 gates passed (same pre-existing UI delivery warning).
 
 **Next findings.** The win dialog still opens on its first button, which can scroll its heading out of view at 320x568. Episode and campaign completion still use the same ordinary victory dialog.

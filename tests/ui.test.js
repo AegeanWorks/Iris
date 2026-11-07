@@ -134,6 +134,17 @@ test("the field guide explains that walls stop light", () => {
   assert.match(help, /Walls stop a beam/);
 });
 
+test("the field guide lists the keyboard shortcuts", () => {
+  const start = html.indexOf('id="help-dialog"');
+  const end = html.indexOf("</dialog>", start);
+  const help = html.slice(start, end);
+  assert.match(help, /Z undo, R reset, H hint/);
+  assert.match(html, /id="btn-undo"[^>]*aria-keyshortcuts="Z"/);
+  assert.match(html, /id="btn-reset"[^>]*aria-keyshortcuts="R"/);
+  assert.match(html, /id="btn-hint"[^>]*aria-keyshortcuts="H"/);
+  assert.match(app, /document\.addEventListener\("keydown", handleShortcut\)/);
+});
+
 test("the field guide opens at its heading", () => {
   assert.match(html, /id="help-heading" tabindex="-1"/);
   assert.match(app, /helpHeading: required\("help-heading"\)/);

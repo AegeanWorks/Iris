@@ -88,3 +88,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The engine validates, renders and unit-tests walls, but no authored chamber used a `#` tile. The Vault, the Episode I finale, was an empty 7x7 frame with four floating mirrors and no structure, and the field guide and symbol table never explained walls.
 - **Decision**: Add two symmetric 2x2 wall blocks to The Vault at rows 1-2, columns 4-5 and rows 4-5, columns 0-1. Both lie outside the unique red and green solution paths, so the stored four-move route and par 4 stay unchanged. Add a wall row to the README symbol table and `Walls stop a beam` to the field guide.
 - **Consequences**: The wall renderer is exercised in a real chamber and the finale reads as an alcoved vault; no save, dependency or solver behavior changes. The solver still reports a unique four-move solution, 102/102 tests are green, and a played run solves the chamber in four moves for three stars.
+
+### ADR-012: Bind Z, R and H to undo, reset and hint
+- **Date**: 2026-11-07
+- **Status**: Accepted
+- **Context**: The board supported arrow keys and Enter/Space, but undo, reset and hint still required a pointer. A keyboard-only player could rotate but could not recover, restart or ask for a hint without leaving the keys, and the field guide never listed the available keys.
+- **Decision**: Add a document `keydown` handler for `Z` (undo), `R` (reset) and `H` (hint). Ignore modified chords, text inputs, dialogs, non-game screens and a won board. Add `aria-keyshortcuts` to the three buttons and a `Shortcuts: Z undo, R reset, H hint` rule to the field guide.
+- **Consequences**: No pointer, save, audio or level behavior changes. The browser dogfood presses all three keys and checks the resulting moves, hint ghost and orientation, and a help-dialog pair shows the new rule. 103/103 tests are green.

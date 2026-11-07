@@ -696,6 +696,35 @@ function moveFocus(x, y, delta) {
   target?.focus();
 }
 
+function shortcutsEnabled(event) {
+  const tag = event.target?.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || event.target?.isContentEditable) {
+    return false;
+  }
+  return state.screen === "game" && Boolean(state.level) && !state.won &&
+    !refs.helpDialog.open && !refs.winDialog.open;
+}
+
+function handleShortcut(event) {
+  if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) {
+    return;
+  }
+  if (!shortcutsEnabled(event)) {
+    return;
+  }
+  const key = event.key.toLowerCase();
+  if (key === "z") {
+    event.preventDefault();
+    undo();
+  } else if (key === "r") {
+    event.preventDefault();
+    resetLevel();
+  } else if (key === "h") {
+    event.preventDefault();
+    showHint();
+  }
+}
+
 function openHelp() {
   refs.btnHelpClose.textContent = state.screen === "game" ? "Back to the board" : "Begin";
   refs.helpDialog.showModal();
@@ -739,6 +768,8 @@ function wireEvents() {
       openLevel(nextId);
     }
   });
+
+  document.addEventListener("keydown", handleShortcut);
 
   refs.board.addEventListener("keydown", (event) => {
     if (!state.level) {

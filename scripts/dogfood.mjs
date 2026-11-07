@@ -364,6 +364,32 @@ async function main() {
     if (wrongAngles.length) {
       throw new Error(`A mirror glyph does not match its orientation: ${JSON.stringify(wrongAngles)}.`);
     }
+    await clickMirror(connection, 2, 1);
+    await pressKey(connection, "z", "KeyZ", 90);
+    const undoShortcut = await connection.evaluate(`(() => ({
+      moves: document.getElementById('move-count').textContent,
+      orientation: document.querySelector('.tile-tile[data-x="2"][data-y="1"]').dataset.orientation
+    }))()`);
+    if (undoShortcut.moves !== "0" || undoShortcut.orientation !== "/") {
+      throw new Error(`Z did not undo the last rotation: ${JSON.stringify(undoShortcut)}.`);
+    }
+    await pressKey(connection, "h", "KeyH", 72);
+    const hintShortcut = await connection.evaluate(
+      "Boolean(document.querySelector('.hint-ghost'))",
+    );
+    if (!hintShortcut) {
+      throw new Error("H did not open a hint.");
+    }
+    await pressKey(connection, "r", "KeyR", 82);
+    const resetShortcut = await connection.evaluate(`(() => ({
+      moves: document.getElementById('move-count').textContent,
+      hint: Boolean(document.querySelector('.hint-ghost')),
+      orientation: document.querySelector('.tile-tile[data-x="2"][data-y="1"]').dataset.orientation
+    }))()`);
+    if (resetShortcut.moves !== "0" || resetShortcut.hint || resetShortcut.orientation !== "/") {
+      throw new Error(`R did not reset the chamber and clear the hint: ${JSON.stringify(resetShortcut)}.`);
+    }
+
     await connection.evaluate(`(() => {
       window.__irisTurns = [];
       document.addEventListener('animationstart', (event) => {
@@ -642,7 +668,7 @@ async function main() {
     if (narrowHelp.headingTop < narrowHelp.dialogTop - 1 || narrowHelp.overflow) {
       throw new Error(`The field guide is clipped on a narrow screen: ${JSON.stringify(narrowHelp)}.`);
     }
-    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, hint, hint/charge/uncharge/win audio, in-game help, labeled mixing key, preview and responsive board.");
+    console.log("[OK] Iris dogfood: campaign start, 12 chambers, solved chamber, focus, arrows, Z/R/H shortcuts, hint, hint/charge/uncharge/win audio, in-game help, labeled mixing key, preview and responsive board.");
     return 0;
   } catch (error) {
     console.error(`[FAIL] Iris dogfood: ${error.message}`);

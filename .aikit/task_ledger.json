@@ -1,64 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "iris-cycle-05",
+    "task_id": "iris-cycle-06",
     "last_phase": "verification",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1794081246.1931038,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1794081653.8910859,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": [],
-    "completed_at": 1794081286.3858688
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-02",
-      "phase": "planning",
-      "phase_num": 2,
-      "description": "[1/4] Graphics and effects: animate the mirror line through a 180ms quarter turn in the click direction, proven by a paused mid-turn screenshot pair and a browser run that reads the animation and its final orientation",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794077803.177987,
-      "timestamp_str": "2026-11-07 21:56:43",
-      "agent": "opencode:iris-cycle",
-      "impact_assessment": {
-        "why": "Every mirror rotation rebuilds the board and swaps the line from +45deg to -45deg in one frame; the interaction has no motion, so the core verb of the game reads as a teleport rather than a turn.",
-        "benefits": "A short, direction-aware quarter-turn makes the central interaction legible and satisfying without changing the beam result, controls, timing or save format; reduced-motion users keep the instant swap.",
-        "risks": "contract: PLAYABLE.md static assets only; dependency: none; concurrency: none; state: no progress or level data change.",
-        "mitigation": "Drive the animation from a transient state.spin keyed to the rotated cell, honour prefers-reduced-motion through the existing global rule, add a failing dogfood check before the CSS, and re-run the full campaign after the change."
-      },
-      "plan_digest": "5821159d7782aedce6617f9378098deeddac9a35f56558f2849b25f9f30ead98"
-    },
-    {
-      "task_id": "iris-cycle-02",
-      "phase": "implementation",
-      "phase_num": 3,
-      "description": "[2/4]-[3/4] Corrected the inverted mirror glyph, added the direction-aware 180ms quarter-turn animation, and expanded dogfood to measure glyph angles, the animationstart event and the settled orientation",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794079315.1424425,
-      "timestamp_str": "2026-11-07 22:21:55",
-      "agent": "opencode:iris-cycle"
-    },
-    {
-      "task_id": "iris-cycle-02",
-      "phase": "verification",
-      "phase_num": 4,
-      "description": "[4/4] Verification complete; checklists: passed; 87/87 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK twice in a row and under load, aikit 5/5 gates; glyph before/after pair at 1440, animation instant/mid-turn pair and three-frame strip, full 12-chamber campaign",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1794079331.8725886,
-      "timestamp_str": "2026-11-07 22:22:11",
-      "agent": "opencode:iris-cycle",
-      "handoff": {
-        "state": "7 modified and 1 untracked file ready for explicit staging",
-        "next": "commit cycle 2, then start cycle 3 on audio cues",
-        "failed": "none",
-        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus and arrow-key scroll deferred",
-        "evidence": ".aikit/improvement-record.md cycle 2, scratch/iris-evidence/cycle-02"
-      }
-    },
     {
       "task_id": "iris-cycle-02",
       "phase": "completed",
@@ -281,6 +233,53 @@
       "timestamp": 1794081286.385871,
       "timestamp_str": "2026-11-07 22:54:46",
       "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-06",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/4] Input feel: add Z/R/H keyboard shortcuts for undo, reset and hint, document them in the field guide and README, and prove them with a keyboard-only browser run plus a before/after help dialog pair",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081348.752644,
+      "timestamp_str": "2026-11-07 22:55:48",
+      "agent": "opencode:iris-cycle",
+      "impact_assessment": {
+        "why": "The board supports arrow keys and Enter/Space, but undo, reset and hint still require a pointer. A keyboard-only player can rotate but cannot recover, restart or ask for a hint without leaving the keys.",
+        "benefits": "The three recovery actions get single-key shortcuts that stay out of the way of typing, dialogs and modified chords; the field guide and aria-keyshortcuts make the bindings discoverable and screen-reader visible.",
+        "risks": "contract: no runtime dependency or save change; dependency: none; concurrency: none; state: shortcuts must not fire behind an open dialog or after a win.",
+        "mitigation": "Guard the handler on the game screen, an open dialog, a winning board and modifier keys; add a browser run that presses Z, H and R; keep Enter/Space and pointer behavior unchanged."
+      },
+      "plan_digest": "322872644fa7a9e72dea4ce15f82232f8762a033cc41eae59bbee4d350a6cbf5"
+    },
+    {
+      "task_id": "iris-cycle-06",
+      "phase": "implementation",
+      "phase_num": 3,
+      "description": "[2/4]-[3/4] Added the guarded Z/R/H keydown handler, aria-keyshortcuts and field-guide rule, with a failing-first browser check that now presses all three keys",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081639.3251684,
+      "timestamp_str": "2026-11-07 23:00:39",
+      "agent": "opencode:iris-cycle"
+    },
+    {
+      "task_id": "iris-cycle-06",
+      "phase": "verification",
+      "phase_num": 4,
+      "description": "[4/4] Verification complete; checklists: passed; 103/103 node tests, check-levels 12/12, UI inventory 19 entries, browser dogfood OK with Z/R/H, aikit 5/5 gates; before/after help pair shows the shortcut rule and the keyboard run checks undo, hint and reset",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1794081653.8910859,
+      "timestamp_str": "2026-11-07 23:00:53",
+      "agent": "opencode:iris-cycle",
+      "handoff": {
+        "state": "7 modified files ready for explicit staging",
+        "next": "commit cycle 6, then fix the win-dialog focus on short screens or celebrate episode completion",
+        "failed": "none",
+        "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
+        "evidence": ".aikit/improvement-record.md cycle 6, scratch/iris-evidence/cycle-06"
+      }
     }
   ]
 }
