@@ -3,24 +3,15 @@
   "active_task": {
     "task_id": "iris-cycle-06",
     "last_phase": "verification",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1794081653.8910859,
     "owner": "opencode:iris-cycle",
     "started_by": "opencode:iris-cycle",
-    "continuations": []
+    "continuations": [],
+    "completed_at": 1794081702.5284126
   },
   "checkpoints": [
-    {
-      "task_id": "iris-cycle-02",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'iris-cycle-02' completed successfully.",
-      "status": "completed",
-      "timestamp": 1794079367.8234296,
-      "timestamp_str": "2026-11-07 22:22:47",
-      "agent": "opencode:iris-cycle"
-    },
     {
       "task_id": "iris-cycle-03",
       "phase": "planning",
@@ -280,6 +271,16 @@
         "open": "pre-existing UI contract delivery warning, win-dialog narrow-screen focus",
         "evidence": ".aikit/improvement-record.md cycle 6, scratch/iris-evidence/cycle-06"
       }
+    },
+    {
+      "task_id": "iris-cycle-06",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'iris-cycle-06' completed successfully.",
+      "status": "completed",
+      "timestamp": 1794081702.5284145,
+      "timestamp_str": "2026-11-07 23:01:42",
+      "agent": "opencode:iris-cycle"
     }
   ]
 }
