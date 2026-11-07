@@ -334,3 +334,13 @@ Range `bfc09a4..dc700c7` (adds audio cues and authored-chamber progress). Re-rea
 - Fix: `audio.stop()` now exposes the existing voice-set teardown, and `showTitle`, `showChambers`, `openLevel` and `resetLevel` call it. The win dialog itself still plays its fanfare.
 - Proof after the fix: the same browser run produced the seven scheduled stops plus seven `when: null` immediate stops, and the fake-context `stop silences every active voice` test passes.
 - Gates: 112/112 tests, 12/12 chamber checks, 19 UI entries, dogfood green, aikit 5/5. Pushed in the 1→6 wave.
+
+## Verification wave 1→9 — clean
+
+Range `bfc09a4..e83238e` (adds The Vault walls, Z/R/H shortcuts, episode finales and the board-symbol key). Re-checked the mobile states those changes introduced at 390x844:
+
+- The Vault: 8 wall tiles, board 358.8px square inside the 390px viewport, no horizontal overflow.
+- White Crown campaign finale: dialog 403px tall with `scrollHeight 401`, heading visible, `CAMPAIGN COMPLETE` and the spectrum callout fully readable.
+- Field guide: 4 symbol rows, 4 mixing rows, no horizontal overflow, `scrollTop 0` and the heading visible.
+
+No new bug, gap or improvement candidate survived. Gates stayed green at 112/112 tests, 12/12 chamber checks, 19 UI entries, dogfood and aikit 5/5. Push is a no-op after the 1→6 wave.
